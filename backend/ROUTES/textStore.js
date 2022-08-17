@@ -36,6 +36,7 @@ router.get('/:id', async(req,res,next)=>{
 
 
 router.post('/', async (req,res,next)=>{
+    console.log(req.body)
     try{
         if(!req.body.textholder.text || !req.body.textholder.description || !req.body.textholder.title || !req.body.textholder.source){
           
@@ -44,6 +45,7 @@ router.post('/', async (req,res,next)=>{
            
         }
         else{
+            console.log(req.body.textholder)
             const {text, description, title ,source} = req.body.textholder
             const textData =   await textObject.create({
                 textholder:{text,

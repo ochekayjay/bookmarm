@@ -22,15 +22,15 @@ app.use(
   );
 
 
-  app.set("view engine", "ejs");
+  /*app.set("view engine", "ejs");
   app.set("views", path.join(__dirname, '..', "views"));
-  app.use(express.static(`${__dirname}/../public`));
+  app.use(express.static(`${__dirname}/../public`));*/
 ConnectDB()
 
-//app.use(express.json())
+/*app.use(express.json())
  app.use("/imagesend", (req, res) => {
   res.status(200).render("index");
-});
+});*/
  
 
 /*const multerStorage = multer.diskStorage({

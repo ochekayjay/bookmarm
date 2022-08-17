@@ -64,8 +64,7 @@ router.post('/', async (req,res,next)=>{
 router.get('/:folder/link/:link', async (req,res,next)=>{
     try{
         const linkparam = linkingid(req.params.link)
-        const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{linkId:linkparam}).populate('linkId')
-
+        const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{linkId:linkparam},{new:true}).populate('linkId')
         res.json(linkContainer)
     }
     catch(error){
@@ -76,8 +75,8 @@ router.get('/:folder/link/:link', async (req,res,next)=>{
 router.get('/:folder/text/:text', async (req,res,next)=>{
     try{
         const linkparam = linkingid(req.params.text)
-        const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{textId:linkparam}).populate('textId')
-
+        const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{textId:linkparam},{new:true}).populate('textId')
+        
         res.json(linkContainer)
     }
     catch(error){
@@ -89,7 +88,8 @@ router.get('/:folder/text/:text', async (req,res,next)=>{
 router.get('/:folder/img/:img', async (req,res,next)=>{
     try{
         const linkparam = linkingid(req.params.img)
-        const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{imageId:linkparam}).populate('imageId')
+        const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{imageId:linkparam},{new:true}).populate('imageId')
+    
 
         res.json(linkContainer)
     }
@@ -166,7 +166,7 @@ router.delete('/:id',async(req,res,next)=>{
 
 
 
-//this creates the middleware that accesses all apis along the folder/link path
+//this creates the middleware that accesses all apis along the folder/links||images||texts path
 router.use('/:id/links',redirect,require('../ROUTES/linkStore'))
 
 router.use('/:id/images',redirect,require('../ROUTES/imageStore'))

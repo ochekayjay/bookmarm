@@ -7,6 +7,7 @@ const fs = require('fs');
 const foldermodel = require('../model/folderModel');
 const usermodel = require('../model/userStoreModel');
 const { json } = require('body-parser');
+const { Console } = require('console');
 
 //validate ids
 
@@ -27,7 +28,7 @@ const idvalidator = async(req,res,next)=>{
 }
 
 const createLink = async(req,res,next)=>{
-  const imageholder = await imageModel.findOne({id:req.params.id})
+  const imageholder = await imageModel.findOne({id:req.params.imageFolderid})
   req.imageId = imageholder._id
   next()
 }
@@ -110,7 +111,7 @@ const multerStorage = multer.diskStorage({
 })*/
 
 
-router.post('/:userid/:folderid/imageUpload',createdirectory,createLink,upload.single('myFile'),async(req,res,next)=>{
+router.post('/:userid/:folderid/imagePush',createdirectory,createLink,upload.single('myFile'),async(req,res,next)=>{
   try{
       const folderHolder = await foldermodel.findOne({_id:req.params.folderid})
       if(!folderHolder){
@@ -139,5 +140,63 @@ router.post('/:userid/:folderid/imageUpload',createdirectory,createLink,upload.s
 
 })
 
+
+router.post('/:userid/:folderid/:imageFolderid/removeImage',createLink,async(req,res,next)=>{
+
+  const SpecificUser = req.params.userid;
+  const folderId = req.params.folderid;
+  let imgArray;
+
+  try{
+    const folderHolder = await foldermodel.findOne({_id:req.params.folderid})
+    if(!folderHolder){
+        res.status(400)
+        console.log('c')
+        throw new Error('this folder does not exist')
+    }
+    else{
+       const imageHolder = await imageModel.findOne({_id:req.imageId})
+       console.log(imageHolder.imageFolder)
+       for(let i=0; i<imageHolder.imageFolder.length;i++){
+        if (imageHolder.imageFolder[i].nameofimage === req.query.imagename){
+            console.log('a')
+            const imageHold = imageHolder.imageFolder
+            imgArray = imageHold.splice(i,1)
+        }
+       }
+       
+        const updatedImageHolder = await imageModel.findOneAndUpdate({_id:req.imageId},
+            {
+
+                $pull:   {imageFolder:imgArray[0],
+                    }
+                },
+                {new : true})
+                const direct = path.join(__dirname,'..','..', `public/${SpecificUser}/${folderId}`)
+                fs.readdir(direct, (err, files) => {
+                  if (err) throw err;
+                
+                  for (const file of files) {
+                    if(req.query.imagename === file){
+                      console.log('b')
+                      fs.unlink(path.join(__dirname,'..','..', `public/${SpecificUser}/${folderId}/${file}`), err => {
+                        if (err) throw err;
+                      });
+                    }
+                  }
+                });
+    
+        res.json(updatedImageHolder)
+
+        
+        
+    }
+}
+catch(error){
+    next(error)
+}
+
+  
+})
 
 module.exports = router
