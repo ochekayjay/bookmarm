@@ -21,6 +21,7 @@ app.use(
     })
   );
 
+  app.use(cors({origin: '*'}))
 
   /*app.set("view engine", "ejs");
   app.set("views", path.join(__dirname, '..', "views"));
