@@ -3,6 +3,7 @@ const port = process.env.PORT || 5000;
 const ConnectDB = require('./config/db');
 const bodyParser = require('body-parser');
 const path = require("path");
+const cors = require('cors');
 const { catchError } = require('./middleware/errorHandler');
 const protect = require('./middleware/authorizeUser')
 const File = require('./model/imageModel');
