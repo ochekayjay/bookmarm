@@ -22,6 +22,10 @@ app.use(
     })
   );
 
+  app.use(
+    bodyParser.json()
+  );
+
   app.use(cors({origin: '*'}))
 
   /*app.set("view engine", "ejs");
