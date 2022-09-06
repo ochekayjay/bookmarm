@@ -3,10 +3,11 @@ const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
     Usernamebio:{
-        type: String,
-        
+        type: String
     },
-  
+    avatarName:{
+        type: String
+    },
     userinfo:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

@@ -151,7 +151,6 @@ router.post('/:userid/:folderid/:imageFolderid/removeImage',createLink,async(req
     const folderHolder = await foldermodel.findOne({_id:req.params.folderid})
     if(!folderHolder){
         res.status(400)
-        console.log('c')
         throw new Error('this folder does not exist')
     }
     else{
@@ -159,7 +158,7 @@ router.post('/:userid/:folderid/:imageFolderid/removeImage',createLink,async(req
        console.log(imageHolder.imageFolder)
        for(let i=0; i<imageHolder.imageFolder.length;i++){
         if (imageHolder.imageFolder[i].nameofimage === req.query.imagename){
-            console.log('a')
+          console.log('a')
             const imageHold = imageHolder.imageFolder
             imgArray = imageHold.splice(i,1)
         }

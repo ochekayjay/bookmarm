@@ -112,7 +112,7 @@ const upload = multer({
 
 
 
-app.use('/bio',require('./ROUTES/bioStore'))
+app.use('/bio',protect,require('./ROUTES/bioStore'))
 //app.use('/links',require('./ROUTES/linkStore'))
 //app.use('/text',require('./ROUTES/textStore'))
 app.use('/auth',require('./ROUTES/Auth pages/authentication'))
