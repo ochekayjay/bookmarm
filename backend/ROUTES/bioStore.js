@@ -10,6 +10,8 @@ const imageSetter = (req,res,next)=>{
 
 }
 
+//address to image
+const imageAddress = '../../public/bio'
 
 //create directory to store user images in user profile
 const createdirectory = async(req,res,next)=>{
@@ -81,22 +83,22 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
       const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
         {
   
-            $set:   {"avatarName":req.file.filename,
+            $set:   {"avatarName":`${imageAddress}/${req.user.id}/${req.file.filename}`,
                 }
             },
             {new : true})
-            res.json(updatedImageHolder)
+            res.json({avatarName:updatedImageHolder.avatarName,project:updatedImageHolder?.projectTitle,success:true})
     }
 
     else{
       const folderfile = await Userbio.create({
                 
-        avatarName:req.file.filename,
+        avatarName: `${imageAddress}/${req.user.id}/${req.file.filename}`,
         userinfo:req.user.id,
        
     })
 
-    res.status(200).json(folderfile)}
+    res.status(200).json({avatarName:folderfile.avatarName,success:true,project:folderfile?.projectTitle})}
  
 }
 catch(error){
@@ -110,7 +112,7 @@ router.post('/usernamePush',async(req,res,next)=>{
   try{
     
 
-    if(req.body.Usernamebio){
+    if(req.body.projectTitle){
       const biodata = await Userbio.find({userinfo:req.user.id})
 
       if(biodata){
@@ -118,24 +120,24 @@ router.post('/usernamePush',async(req,res,next)=>{
         const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
           {
   
-              $set:   {"Usernamebio":req.body.Usernamebio,
+              $set:   {"projectTitle":req.body.projectTitle,
                   }
               },
               {new : true})
       console.log(updatedImageHolder)
-      res.json(updatedImageHolder)
+      res.json({avatarName:updatedImageHolder.avatarName,project:updatedImageHolder?.projectTitle,success:true})
       }
 
       else{
         console.log('b')
         const folderfile = await Userbio.create({
                 
-          Usernamebio:req.body.Usernamebio,
+          projectTitle:req.body.projectTitle,
           userinfo:req.user.id,
          
       })
 
-      res.status(200).json(folderfile)}
+      res.status(200).json({avatarName:folderfile.avatarName,success:true,project:folderfile?.projectTitle})}
       
     }
   }
@@ -148,12 +150,12 @@ router.post('/usernamePush',async(req,res,next)=>{
 router.get('/bioUpdate', async(req,res,next)=>{
     try{
         const userInfo = await Userbio.find({userinfo:req.user.id});
-    if(!userInfo || !userInfo.avatarName){
-        res.send('../../public/avatar/freeAvatar.png')
+    if(!userInfo || !userInfo.projectTitle){
+        res.send({avatarName:'../../public/avatar/freeAvatar.png',success:true})
     }
     else{
         
-        res.status(200).send(`../../public/bio/${req.user.id}/${userInfo.avatarName}}`)
+        res.status(200).send({avatarName:`../../public/bio/${req.user.id}/${userInfo.avatarName}`,projectTitle:userInfo.projectTitle,success:true})
     }
     
     }

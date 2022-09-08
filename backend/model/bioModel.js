@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 
 const userSchema = mongoose.Schema({
-    Usernamebio:{
+    projectTitle:{
         type: String
     },
     avatarName:{
