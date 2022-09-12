@@ -151,7 +151,7 @@ router.get('/bioUpdate', async(req,res,next)=>{
     try{
         const userInfo = await Userbio.find({userinfo:req.user.id});
     if(!userInfo || !userInfo.projectTitle){
-        res.send({avatarName:'../../public/avatar/freeAvatar.png',success:true})
+        res.send({avatarName:'https://buukmark.herokuapp.com/avatar/newAvatar.png',success:true})
     }
     else{
         
