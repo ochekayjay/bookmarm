@@ -14,7 +14,7 @@ const multer = require('multer')
 const app  = express();
 
 
-
+app.use(cors({origin: '*'}))
 
 app.use(
     bodyParser.urlencoded({
@@ -26,9 +26,9 @@ app.use(
     bodyParser.json()
   );
 
-  //app.use(express.static(`${__dirname}/../public`))
+  app.use(express.static(`${__dirname}/../public`))
 
-  app.use(cors({origin: '*'}))
+  
 
   /*app.set("view engine", "ejs");
   app.set("views", path.join(__dirname, '..', "views"));
