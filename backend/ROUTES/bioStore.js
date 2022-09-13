@@ -83,22 +83,22 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
       const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
         {
   
-            $set:   {"avatarName":`${imageAddress}/${req.user.id}/${req.file.filename}`,
+            $set:   {"avatarName":req.file.filename,
                 }
             },
             {new : true})
-            res.json({avatarName:updatedImageHolder.avatarName,project:updatedImageHolder?.projectTitle,success:true})
+            res.json({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${updatedImageHolder.avatarName}`,project:updatedImageHolder?.projectTitle,success:true})
     }
 
     else{
       const folderfile = await Userbio.create({
                 
-        avatarName: `${imageAddress}/${req.user.id}/${req.file.filename}`,
+        avatarName: req.file.filename,
         userinfo:req.user.id,
        
     })
 
-    res.status(200).json({avatarName:folderfile.avatarName,success:true,project:folderfile?.projectTitle})}
+    res.status(200).json({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${folderfile.avatarName}`,success:true,project:folderfile?.projectTitle})}
  
 }
 catch(error){
@@ -155,7 +155,7 @@ router.get('/bioUpdate', async(req,res,next)=>{
     }
     else{
         
-        res.status(200).send({avatarName:`../../public/bio/${req.user.id}/${userInfo.avatarName}`,projectTitle:userInfo.projectTitle,success:true})
+        res.status(200).send({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${userInfo.avatarName}`,projectTitle:userInfo.projectTitle,success:true})
     }
     
     }
