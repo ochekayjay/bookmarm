@@ -4,6 +4,8 @@ const Userbio = require('../model/bioModel')
 const router = express.Router();
 const protect = require('../middleware/authorizeUser')
 const multer = require('multer')
+const fs = require('fs');
+const path = require("path");
 
 
 const imageSetter = (req,res,next)=>{
@@ -17,7 +19,7 @@ const imageAddress = '../../public/bio'
 const createdirectory = async(req,res,next)=>{
   const SpecificUser = req.user.id;
   const userInfo = await Userbio.find({userid:req.user.id});
-  if(userInfo){
+  if(userInfo.avatarName){
     fs.rmdir(path.join(__dirname,'..','..','public','bio',`${SpecificUser}`),{ recursive: true },(err) => {
       //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
       console.log(__dirname)
@@ -28,16 +30,18 @@ const createdirectory = async(req,res,next)=>{
   })
   }
     
-    
-  console.log('a')
-    fs.mkdir(path.join(__dirname,'..','..', 'public','bio',`${SpecificUser}`), { recursive: true },(err) => {
-      //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
-      console.log(__dirname)
-      if (err) {
-          return console.error(err);
-      }
-      console.log('Directory created successfully!');
-  });
+    else{
+
+      console.log('a')
+        fs.mkdir(path.join(__dirname,'..','..', 'public','bio',`${SpecificUser}`), { recursive: true },(err) => {
+          //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
+          console.log(__dirname)
+          if (err) {
+              return console.error(err);
+          }
+          console.log('Directory created successfully!');
+      });
+    }
   
     next()
   }
@@ -78,7 +82,7 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
     
     const biodata = await Userbio.find({userinfo:req.user.id})
 
-    if(biodata){
+    if(biodata.avatarName){
 
       const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
         {
