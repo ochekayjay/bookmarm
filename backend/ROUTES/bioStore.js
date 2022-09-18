@@ -19,31 +19,61 @@ const imageAddress = '../../public/bio'
 const createdirectory = async(req,res,next)=>{
   const SpecificUser = req.user.id;
   const userInfo = await Userbio.find({userid:req.user.id});
-  if(userInfo.avatarName){
-    fs.rmdir(path.join(__dirname,'..','..','public','bio',`${SpecificUser}`),{ recursive: true },(err) => {
+  if(userInfo[0]){
+    if(userInfo[0].avatarName){
+      console.log('deleting path')
+      fs.rmdirSync(path.join(__dirname,'..','..','public','bio',`${SpecificUser}`),{ recursive: true },(err) => {
+        //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
+        console.log(__dirname)
+        if (err) {
+            return console.error(err);
+        }
+        console.log('Directory deleted successfully!');
+
+        
+    })
+
+    fs.mkdirSync(path.join(__dirname,'..','..', 'public','bio',`${SpecificUser}`), { recursive: true },(err) => {
       //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
       console.log(__dirname)
       if (err) {
           return console.error(err);
       }
-      console.log('Directory deleted successfully!');
-  })
-  }
-    
-    else{
-
-      console.log('a')
-        fs.mkdir(path.join(__dirname,'..','..', 'public','bio',`${SpecificUser}`), { recursive: true },(err) => {
-          //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
-          console.log(__dirname)
-          if (err) {
-              return console.error(err);
-          }
-          console.log('Directory created successfully!');
-      });
+      console.log('Directory created successfully!');
+  });
     }
+
+    else{
+      console.log('making path')
+      fs.mkdirSync(path.join(__dirname,'..','..', 'public','bio',`${SpecificUser}`), { recursive: true },(err) => {
+        //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
+        console.log(__dirname)
+        if (err) {
+            return console.error(err);
+        }
+        console.log('Directory created successfully!');
+    });
+    }
+    
+  next()
+  }
+
+  else{
+    console.log(typeof userInfo[0])
+    console.log('a')
+    fs.mkdirSync(path.join(__dirname,'..','..', 'public','bio',`${SpecificUser}`), { recursive: true },(err) => {
+      //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
+      console.log(__dirname)
+      if (err) {
+          return console.error(err);
+      }
+      console.log('Directory created successfully!');
+  });
+  next()
+  }
   
-    next()
+  
+    
   }
 
 
@@ -81,8 +111,9 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
   try{
     
     const biodata = await Userbio.find({userinfo:req.user.id})
+    console.log(biodata)
 
-    if(biodata.avatarName){
+    if(biodata[0]){
 
       const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
         {
@@ -91,6 +122,7 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
                 }
             },
             {new : true})
+            console.log(updatedImageHolder)
             res.json({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${updatedImageHolder.avatarName}`,project:updatedImageHolder?.projectTitle,success:true})
     }
 
@@ -103,8 +135,10 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
     })
 
     res.status(200).json({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${folderfile.avatarName}`,success:true,project:folderfile?.projectTitle})}
- 
-}
+    }
+
+    
+
 catch(error){
   next(error)
 }
@@ -119,7 +153,7 @@ router.post('/usernamePush',async(req,res,next)=>{
     if(req.body.projectTitle){
       const biodata = await Userbio.find({userinfo:req.user.id})
 
-      if(biodata){
+      if(biodata[0].projectTitle || biodata[0].avatarName){
         console.log('a')
         const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
           {
@@ -154,8 +188,15 @@ router.post('/usernamePush',async(req,res,next)=>{
 router.get('/bioUpdate', async(req,res,next)=>{
     try{
         const userInfo = await Userbio.find({userinfo:req.user.id});
-    if(!userInfo || !userInfo.projectTitle){
+    if(!userInfo[0].avatarName && !userInfo[0].projectTitle){
         res.send({avatarName:'https://buukmark.herokuapp.com/avatar/newAvatar.png',success:true})
+    }
+    else if(!userInfo[0].avatarName){
+      res.status(200).send({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${userInfo.avatarName}`,success:true})
+    }
+
+    else if(!userInfo[0].projectTitle){
+      res.status(200).send({projectTitle:userInfo.projectTitle,success:true})
     }
     else{
         
