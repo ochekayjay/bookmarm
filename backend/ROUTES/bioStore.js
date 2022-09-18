@@ -188,20 +188,27 @@ router.post('/usernamePush',async(req,res,next)=>{
 router.get('/bioUpdate', async(req,res,next)=>{
     try{
         const userInfo = await Userbio.find({userinfo:req.user.id});
-    if(!userInfo[0].avatarName && !userInfo[0].projectTitle){
-        res.send({avatarName:'https://buukmark.herokuapp.com/avatar/newAvatar.png',success:true})
-    }
-    else if(!userInfo[0].avatarName){
-      res.status(200).send({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${userInfo.avatarName}`,success:true})
-    }
+        if(userInfo[0]){
 
-    else if(!userInfo[0].projectTitle){
-      res.status(200).send({projectTitle:userInfo.projectTitle,success:true})
-    }
-    else{
-        
-        res.status(200).send({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${userInfo.avatarName}`,projectTitle:userInfo.projectTitle,success:true})
-    }
+          if(!userInfo[0].avatarName && !userInfo[0].projectTitle){
+              res.send({avatarName:'https://buukmark.herokuapp.com/avatar/newAvatar.png',success:true})
+          }
+          else if(userInfo[0].avatarName && !userInfo[0].projectTitle){
+            res.status(200).send({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${userInfo.avatarName}`,success:true})
+          }
+      
+          else if(userInfo[0].projectTitle && !userInfo[0].avatarName){
+            res.status(200).send({projectTitle:userInfo.projectTitle,success:true})
+          }
+          else{
+              
+              res.status(200).send({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${userInfo.avatarName}`,projectTitle:userInfo.projectTitle,success:true})
+          }
+        }
+
+        else{
+          res.send({avatarName:'https://buukmark.herokuapp.com/avatar/newAvatar.png',success:true})
+        }
     
     }
     catch(error){
