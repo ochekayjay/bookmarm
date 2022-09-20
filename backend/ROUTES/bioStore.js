@@ -239,7 +239,7 @@ router.post('/',protect,async(req,res,next)=>{
     try {
         if(!req.body.Usernamebio ){
             res.status(400)
-            throw new Error('kindly fill all fields')
+            throw new Error('kindly fill all details')
         }
         console.log('getting in')
         const user = await Userbio.create({
