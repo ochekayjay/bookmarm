@@ -23,7 +23,7 @@ router.get('/',async (req,res,next)=>{
     try{
         const folderdata = await folderModel.find({userid:req.user.id}).populate(['linkId','imageId','textId'])
         if(folderdata){
-            res.status(200).json(folderdata)
+            res.status(200).json({folderdata:folderdata,success:true})
         }
         else{
             res.status(400)
@@ -50,10 +50,9 @@ router.post('/', async (req,res,next)=>{
                 
                 name:name,
                 userid:req.user.id,
-                linkid:req?.linkId
             })
 
-            res.status(200).json(folderfile)
+            res.status(200).json({folderfile:folderfile,success:true})
         }
     }
     catch(error){
@@ -65,7 +64,7 @@ router.get('/:folder/link/:link', async (req,res,next)=>{
     try{
         const linkparam = linkingid(req.params.link)
         const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{linkId:linkparam},{new:true}).populate('linkId')
-        res.json(linkContainer)
+        res.json({linkContainer:linkContainer,success:true})
     }
     catch(error){
         next(error)
@@ -77,7 +76,7 @@ router.get('/:folder/text/:text', async (req,res,next)=>{
         const linkparam = linkingid(req.params.text)
         const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{textId:linkparam},{new:true}).populate('textId')
         
-        res.json(linkContainer)
+        res.json({linkContainer:linkContainer,success:true})
     }
     catch(error){
         next(error)
@@ -91,7 +90,7 @@ router.get('/:folder/img/:img', async (req,res,next)=>{
         const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{imageId:linkparam},{new:true}).populate('imageId')
     
 
-        res.json(linkContainer)
+        res.json({linkContainer:linkContainer,success:true})
     }
     catch(error){
         next(error)
@@ -153,7 +152,7 @@ router.delete('/:id',async(req,res,next)=>{
             throw new Error('this link does not exist')
         }
         else{
-            await folderholder.reomove()
+            await folderholder.remove()
             res.json({id:req.user.id})
         }
 

@@ -8,6 +8,8 @@ const foldermodel = require('../model/folderModel');
 const usermodel = require('../model/userStoreModel');
 const { json } = require('body-parser');
 const { Console } = require('console');
+const mongoose = require('mongoose')
+const linkingid = mongoose.Types.ObjectId
 
 //validate ids
 
@@ -28,16 +30,24 @@ const idvalidator = async(req,res,next)=>{
 }
 
 const createLink = async(req,res,next)=>{
-  const imageholder = await imageModel.findOne({id:req.params.imageFolderid})
-  req.imageId = imageholder._id
-  next()
+  const imageholder = await imageModel.findOne({userid:req.user.id})
+  if(imageholder){
+      req.imageId = imageholder._id
+  
+      next()
+    }
+  else{
+ 
+        next()
+  }
+ 
 }
 
 
 //middleware for creating directory
 const createdirectory = (req,res,next)=>{
-  const SpecificUser = req.params.userid;
-  const folderId = req.params.folderid;
+  const SpecificUser = req.user.id;
+  const folderId = req.idholder;
 console.log('a')
   fs.mkdir(path.join(__dirname,'..','..', 'public',`${SpecificUser}`,`${folderId}`), { recursive: true },(err) => {
     console.log(path.join(__dirname,'..','..', `public/${SpecificUser}/${folderId}`))
@@ -59,8 +69,8 @@ console.log('a')
 
 const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-      const SpecificUser = req.params.userid;
-      const folderId = req.params.folderid;
+      const SpecificUser = req.user.id;
+      const folderId = req.idholder;
      
       cb(null, path.join(__dirname,'..','..', `public/${SpecificUser}/${folderId}`));
     },
@@ -111,26 +121,61 @@ const multerStorage = multer.diskStorage({
 })*/
 
 
-router.post('/:userid/:folderid/imagePush',createdirectory,createLink,upload.single('myFile'),async(req,res,next)=>{
+router.post('/imagePush',createdirectory,createLink,upload.single('myFile'),async(req,res,next)=>{
+  
   try{
-      const folderHolder = await foldermodel.findOne({_id:req.params.folderid})
-      if(!folderHolder){
-          res.status(400)
-          throw new Error('this folder does not exist')
-      }
-      else{
-         const {title ,source} = req.body
-         const holder = {title,source,nameofimage:req.file.filename}
-         
-          const updatedImageHolder = await imageModel.findOneAndUpdate({_id:req.imageId},
-              {
+    if(!req.body.title || !req.body.source){
+          
+      res.status(400)
+      throw new Error('kindly fill all fields')
+     
+  }
 
-                  $push:   {"imageFolder":holder,
-                      }
-                  },
-                  {new : true})
+      else{
       
-          res.json(updatedImageHolder)
+        const imgdata = await imageModel.findOne({_id:req.imageId})
+        if(imgdata== null){
+        
+          const {title ,source} = req.body
+          const imageData =   await imageModel.create({
+              imageFolder:{
+              title,
+              source,
+              nameofimage:req.file.filename
+              },
+              folder:req.idholder,
+              user: req.user.id
+          })
+
+                console.log(imageData)
+                const linkparam = linkingid(imageData._id)
+                const imageContainer = await foldermodel.findByIdAndUpdate(req.idholder,{imageId:linkparam},{new:true}).populate('imageId')
+                console.log('trying in linkstore')
+                console.log(imageContainer)
+                res.json({imageData:imageData,success:true})
+        }
+
+        else{
+          
+          const {title ,source} = req.body
+          const holder = {title,source,nameofimage:req.file.filename}
+          
+           const updatedImageHolder = await imageModel.findOneAndUpdate({_id:req.imageId},
+               {
+ 
+                   $push:   {"imageFolder":holder,
+                       }
+                   },
+                   {new : true})
+       
+           //res.json({updatedImageHolder:updatedImageHolder,success:true})
+           
+                const linkparam = linkingid(updatedImageHolder._id)
+                const imageContainer = await foldermodel.findByIdAndUpdate(req.idholder,{imageId:linkparam},{new:true}).populate('imageId')
+                console.log('trying in linkstore')
+                console.log(imageContainer)
+                res.json({updatedImageHolder,success:true})
+        }
           
       }
   }
@@ -141,20 +186,22 @@ router.post('/:userid/:folderid/imagePush',createdirectory,createLink,upload.sin
 })
 
 
-router.post('/:userid/:folderid/:imageFolderid/removeImage',createLink,async(req,res,next)=>{
 
-  const SpecificUser = req.params.userid;
-  const folderId = req.params.folderid;
+//api to remove an image,has req.query embedded to it
+router.delete('/:specificImageId/removeImage',createLink,async(req,res,next)=>{
+
+  const SpecificUser = req.user.id;
+  const folderId = req.idholder;
   let imgArray;
 
   try{
-    const folderHolder = await foldermodel.findOne({_id:req.params.folderid})
-    if(!folderHolder){
+    const folderHolder = await foldermodel.findOne({_id:req.idholder})
+    if(folderHolder == null){
         res.status(400)
         throw new Error('this folder does not exist')
     }
     else{
-       const imageHolder = await imageModel.findOne({_id:req.imageId})
+       /*const imageHolder = await imageModel.findOne({_id:req.imageId})
        console.log(imageHolder.imageFolder)
        for(let i=0; i<imageHolder.imageFolder.length;i++){
         if (imageHolder.imageFolder[i].nameofimage === req.query.imagename){
@@ -162,12 +209,12 @@ router.post('/:userid/:folderid/:imageFolderid/removeImage',createLink,async(req
             const imageHold = imageHolder.imageFolder
             imgArray = imageHold.splice(i,1)
         }
-       }
+       }*/
        
         const updatedImageHolder = await imageModel.findOneAndUpdate({_id:req.imageId},
             {
 
-                $pull:   {imageFolder:imgArray[0],
+                $pull:   {imageFolder:{_id:req.params.specificImageId}
                     }
                 },
                 {new : true})
@@ -185,7 +232,7 @@ router.post('/:userid/:folderid/:imageFolderid/removeImage',createLink,async(req
                   }
                 });
     
-        res.json(updatedImageHolder)
+        res.json({updatedImageHolder: updatedImageHolder,success:true})
 
         
         

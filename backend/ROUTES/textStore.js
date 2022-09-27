@@ -3,6 +3,8 @@ const  [ linkObject,textObject ]  = require('../model/userStoreModel')
 const router = express.Router()
 const protect = require('../middleware/authorizeUser')
 const folderModel = require('../model/folderModel')
+const mongoose = require('mongoose')
+const linkingid = mongoose.Types.ObjectId
 
 //middleware to get the id of the textholder
 const createLink = async(req,res,next)=>{
@@ -23,7 +25,7 @@ router.get('/:id', async(req,res,next)=>{
         res.status(400).send('this folder does not exist')
     }
     else{
-        res.status(200).json(textFolder)
+        res.status(200).json({textFolder:textFolder,success:true})
     }
     }
 
@@ -45,20 +47,52 @@ router.post('/', async (req,res,next)=>{
            
         }
         else{
-            console.log(req.body.textholder)
-            const {text, description, title ,source} = req.body.textholder
-            const textData =   await textObject.create({
-                textholder:{text,
-                description,
-                title,
-                source,
-                },
-                userid: req.user.id
-            })
-            res.json(textData)
-            console.log(textData)
+
+            const textdata = await textObject.findOne({_id:req.textId})
             
+            if(textdata == null){
+
+                const {text, description, title ,source} = req.body.textholder
+                const textData =   await textObject.create({
+                    textholder:{text,
+                    description,
+                    title,
+                    source,
+                    },
+                    userid: req.user.id
+                })
+    
+                    const linkparam = linkingid(linkData._id)
+                    const textContainer = await folderModel.findByIdAndUpdate(req.query?.folder,{textId:linkparam},{new:true}).populate('textId')
+                    console.log('trying in linkstore')
+                    console.log(linkContainer)
+                    //res.json({linkData:linkData,success:true})
+                    res.json({textData:textData,success:true})
+                    console.log(textData)
+                
+            }
+
+            else{
+                const {link, description ,title ,source} = req.body.linkholder
+                const holder = {text,description,title,source}
+
+                const updatedText = await textObject.findOneAndUpdate({_id:req.textId},
+                    {
+    
+                        $push:   {"textholder":holder,
+                            }
+                        },
+                        {new : true})
+            
+                
+                const linkparam = linkingid(updatedText._id)
+                const linkContainer = await folderModel.findByIdAndUpdate(req.query?.folder,{textId:linkparam},{new:true}).populate('textId')
+                //res.json({updatedLink:updatedLink,success:true})
+                res.json({linkContainer:linkContainer,success:true})
+            }
         }
+
+            
     }
     catch(error){
         next(error)
