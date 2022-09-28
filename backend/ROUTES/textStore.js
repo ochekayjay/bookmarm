@@ -64,11 +64,10 @@ router.post('/', async (req,res,next)=>{
     
                     const linkparam = linkingid(linkData._id)
                     const textContainer = await folderModel.findByIdAndUpdate(req.query?.folder,{textId:linkparam},{new:true}).populate('textId')
-                    console.log('trying in linkstore')
-                    console.log(linkContainer)
+                    
                     //res.json({linkData:linkData,success:true})
                     res.json({textData:textData,success:true})
-                    console.log(textData)
+                    
                 
             }
 
@@ -88,7 +87,7 @@ router.post('/', async (req,res,next)=>{
                 const linkparam = linkingid(updatedText._id)
                 const linkContainer = await folderModel.findByIdAndUpdate(req.query?.folder,{textId:linkparam},{new:true}).populate('textId')
                 //res.json({updatedLink:updatedLink,success:true})
-                res.json({linkContainer:linkContainer,success:true})
+                res.json({linkContent:linkContainer,success:true})
             }
         }
 
