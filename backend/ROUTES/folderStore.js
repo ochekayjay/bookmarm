@@ -98,48 +98,7 @@ router.get('/:folder/img/:img', async (req,res,next)=>{
 })
 
 
-/*router.put('/:id', async (req,res,next)=>{
-    try{
-        const folderresult = await folderModel.find({userid:req.user.id})
-        if(!folderresult){
-            res.status(400).json('Folder does not exist')
-        }
-        else{
-            const { folderLink,folderText} = req.body.folderholder
-            let name = req.body.name
-            let folderlinkholder = {
-                link:folderLink.link,
-                description: folderLink.title,
-                title: folderLink.title,
-                source: folderLink.source
-            }
-            let foldertextholder = {
-                text:folderText.text,
-                description: folderText.description,
-                title: folderText.title,
-                source: folderText.source    
-            }
-            
-            let folderfile = await folderModel.findOneAndUpdate({_id:req.params.id},
-                
-               {
 
-                $push:   {"folderholder.folderLink":folderlinkholder,
-                        "folderholder.folderText":foldertextholder,
-                        
-                    }
-                },
-                {new : true}
-            )
-            console.log(foldertextholder)
-            console.log(folderfile.folderholder.folderText)
-            res.status(200).json(folderfile)
-        }
-    }
-    catch(error){
-        next(error)
-    }
-}) */
 
 
 
