@@ -14,7 +14,7 @@ const linkingid = mongoose.Types.ObjectId
 //validate ids
 
 const idvalidator = async(req,res,next)=>{
-  console.log('a')
+  
   const userid = await usermodel.findOne({id:req.params.userid})
   const folderid = await foldermodel.findOne({id:req.params.folderid})
 

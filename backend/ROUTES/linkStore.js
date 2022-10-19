@@ -101,7 +101,7 @@ router.post('/',createLink ,async (req,res,next)=>{
 
 })
 
-/*router.get('/:id', async(req,res,next)=>{
+router.get('/:id', async(req,res,next)=>{
     try{
     const linkFolder = await linkObject.findById(req.params.id);
     if(!linkFolder){
@@ -116,7 +116,7 @@ router.post('/',createLink ,async (req,res,next)=>{
         next(error)
     }
     
-})*/
+})
 
 
 
