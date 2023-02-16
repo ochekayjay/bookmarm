@@ -186,10 +186,13 @@ router.post('/usernamePush',async(req,res,next)=>{
   
 //get-request to get link of image to view the image
 router.get('/bioUpdate', async(req,res,next)=>{
+  console.log('a')
     try{
+      console.log('b')
         const userInfo = await Userbio.find({userinfo:req.user.id});
+        console.log(userInfo)
         if(userInfo[0]){
-
+          
           if(!userInfo[0].avatarName && !userInfo[0].projectTitle){
               res.send({avatarName:'https://savemyfile.onrender.com/avatar/newAvatar.png',success:true})
           }
@@ -207,6 +210,8 @@ router.get('/bioUpdate', async(req,res,next)=>{
         }
 
         else{
+          console.log(userInfo)
+          console.log('aa')
           res.send({avatarName:'https://savemyfile.onrender.com/avatar/newAvatar.png',success:true})
         }
     
