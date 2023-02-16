@@ -60,28 +60,6 @@ router.post('/', async (req,res,next)=>{
     }
 })
 
-router.get('/:folder/link/:link', async (req,res,next)=>{
-    try{
-        const linkparam = linkingid(req.params.link)
-        const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{linkId:linkparam},{new:true}).populate('linkId')
-        res.json({linkContainer:linkContainer,success:true})
-    }
-    catch(error){
-        next(error)
-    }
-})
-
-router.get('/:folder/text/:text', async (req,res,next)=>{
-    try{
-        const linkparam = linkingid(req.params.text)
-        const linkContainer = await folderModel.findByIdAndUpdate(req.params.folder,{textId:linkparam},{new:true}).populate('textId')
-        
-        res.json({linkContainer:linkContainer,success:true})
-    }
-    catch(error){
-        next(error)
-    }
-})
 
 
 router.get('/:folder/img/:img', async (req,res,next)=>{

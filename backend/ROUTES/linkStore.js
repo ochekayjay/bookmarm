@@ -24,7 +24,27 @@ const linkingid = mongoose.Types.ObjectId
 })*/
 
 const createLink = async(req,res,next)=>{
-    const linkholder = await linkObject.findOne({userid:req.user.id})
+    const linkholder = await linkObject.findOne({folderid:req.query?.folder})
+    const folderholder = await folderModel.findById(req.query?.folder)
+    console.log(folderholder.linkId)
+    console.log(linkholder)
+    console.log(folderholder)
+    if(folderholder.linkId===undefined || linkholder=== null){
+        const linkData =   await linkObject.create({
+            folderid:req.query.folder,
+            userid: req.user.id
+        })
+        req.linkId = linkData._id
+        next()
+    }
+    else{
+        req.linkId = linkholder._id
+        console.log('found link id')
+        console.log(req.linkId)
+        next()
+    }
+
+    /*console.log(`checking stuff out ${folderholder.linkId}`)
     if(linkholder){
 
         req.linkId = linkholder._id
@@ -36,7 +56,7 @@ const createLink = async(req,res,next)=>{
         console.log(linkholder===null)
         console.log('not found')
         next()
-    }
+    }*/
 }
 
 
@@ -53,7 +73,7 @@ router.post('/',createLink ,async (req,res,next)=>{
 
             const linkdata = await linkObject.findOne({_id:req.linkId})
             
-            if(linkdata == null){
+            /*if(linkdata == null){
                 
                 const {link, description, title ,source} = req.body.linkholder
                 const linkData =   await linkObject.create({
@@ -72,15 +92,15 @@ router.post('/',createLink ,async (req,res,next)=>{
                 console.log(linkContainer)
                 res.json({linkData:linkData,success:true})
                 //res.json({linkContainer:linkContainer,success:true})
-            }
+            }*/
 
-            else{
+            
                 const {link, description ,title ,source} = req.body.linkholder
            const holder = {link,description,title,source}
            
             const updatedLink = await linkObject.findOneAndUpdate({_id:req.linkId},
                 {
-
+                    //i used set just before push and nothing really changed,find out if you can perform two operations simultaneously
                     $push:   {"linkholder":holder,
                         }
                     },
@@ -91,7 +111,7 @@ router.post('/',createLink ,async (req,res,next)=>{
             const linkContainer = await folderModel.findByIdAndUpdate(req.query?.folder,{linkId:linkparam},{new:true}).populate('linkId')
             //res.json({updatedLink:updatedLink,success:true})
             res.json({linkContainer:linkContainer,success:true})
-            }
+            
             
         }
     }

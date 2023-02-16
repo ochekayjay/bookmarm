@@ -7,6 +7,11 @@ const Link = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: true
+    },
+    folderid:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'folderModel',
+        required: true,
     }
 },
 {

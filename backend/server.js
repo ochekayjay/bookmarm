@@ -1,7 +1,7 @@
 const express = require('express');
 const port = process.env.PORT || 5000;
 const ConnectDB = require('./config/db');
-const bodyParser = require('body-parser');
+const bodyParser = require('body-parser'); 
 const path = require("path");
 const cors = require('cors');
 const { catchError } = require('./middleware/errorHandler');

@@ -123,7 +123,7 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
             },
             {new : true})
             console.log(updatedImageHolder)
-            res.json({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${updatedImageHolder.avatarName}`,project:updatedImageHolder?.projectTitle,success:true})
+            res.json({avatarName:`https://savemyfile.onrender.com/bio/${req.user.id}/${updatedImageHolder.avatarName}`,project:updatedImageHolder?.projectTitle,success:true})
     }
 
     else{
@@ -134,7 +134,7 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
        
     })
 
-    res.status(200).json({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${folderfile.avatarName}`,success:true,project:folderfile?.projectTitle})}
+    res.status(200).json({avatarName:`https://savemyfile.onrender.com/bio/${req.user.id}/${folderfile.avatarName}`,success:true,project:folderfile?.projectTitle})}
     }
 
     
@@ -191,10 +191,10 @@ router.get('/bioUpdate', async(req,res,next)=>{
         if(userInfo[0]){
 
           if(!userInfo[0].avatarName && !userInfo[0].projectTitle){
-              res.send({avatarName:'https://buukmark.herokuapp.com/avatar/newAvatar.png',success:true})
+              res.send({avatarName:'https://savemyfile.onrender.com/avatar/newAvatar.png',success:true})
           }
           else if(userInfo[0].avatarName && !userInfo[0].projectTitle){
-            res.status(200).send({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${userInfo[0].avatarName}`,success:true})
+            res.status(200).send({avatarName:`https://savemyfile.onrender.com/bio/${req.user.id}/${userInfo[0].avatarName}`,success:true})
           }
       
           else if(userInfo[0].projectTitle && !userInfo[0].avatarName){
@@ -202,12 +202,12 @@ router.get('/bioUpdate', async(req,res,next)=>{
           }
           else{
               
-              res.status(200).send({avatarName:`https://buukmark.herokuapp.com/bio/${req.user.id}/${userInfo[0].avatarName}`,projectTitle:userInfo.projectTitle,success:true})
+              res.status(200).send({avatarName:`https://savemyfile.onrender.com/bio/${req.user.id}/${userInfo[0].avatarName}`,projectTitle:userInfo.projectTitle,success:true})
           }
         }
 
         else{
-          res.send({avatarName:'https://buukmark.herokuapp.com/avatar/newAvatar.png',success:true})
+          res.send({avatarName:'https://savemyfile.onrender.com/avatar/newAvatar.png',success:true})
         }
     
     }

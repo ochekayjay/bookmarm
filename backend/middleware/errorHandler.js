@@ -7,7 +7,7 @@ const catchError = (err,req,res,next)=>{
 
     res.status(statusCode)
     res.json({message:err.message,
-    stack: err.stack})
+    stack: err.stack,name:err.name})
 
 }
 

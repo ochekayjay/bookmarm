@@ -68,10 +68,11 @@ console.log('a')
 
 
 const multerStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
+  
+    destination: (req, file,cb) => {
       const SpecificUser = req.user.id;
       const folderId = req.idholder;
-     
+      //cb(new Error("Not an Image"), true)
       cb(null, path.join(__dirname,'..','..', `public/${SpecificUser}/${folderId}`));
     },
     filename: (req, file, cb) => {
@@ -82,12 +83,12 @@ const multerStorage = multer.diskStorage({
   });
 
   const multerFilter = (req, file, cb) => {
-    if (file.mimetype.split("/")[1] === "img"||"png") {
     
-      cb(null, true);
-    } else {
-    
+    if (file.mimetype.split("/")[1] !== "jpeg") {
+      console.log(file.mimetype.split("/")[1])
       cb(new Error("Not an Image"), false);
+    } else {
+      cb(null, true)
     }
   };
 
@@ -133,8 +134,8 @@ router.post('/imagePush',createdirectory,createLink,upload.single('myFile'),asyn
 
       else{
       
-        const imgdata = await imageModel.findOne({_id:req.imageId})
-        if(imgdata== null){
+        const imgdata = await imageModel.findOne({_id:req.imgeId})
+        /*if(imgdata== null){
         
           const {title ,source} = req.body
           const imageData =   await imageModel.create({
@@ -153,14 +154,14 @@ router.post('/imagePush',createdirectory,createLink,upload.single('myFile'),asyn
                 console.log('trying in linkstore')
                 console.log(imageContainer)
                 res.json({imageData:imageData,success:true})
-        }
+        }*/
 
-        else{
+        //else{
           
           const {title ,source} = req.body
           const holder = {title,source,nameofimage:req.file.filename}
           
-           const updatedImageHolder = await imageModel.findOneAndUpdate({_id:req.imageId},
+           const updatedImageHolder = await imageModel.findOneAndUpdate({_id:req.ieId},
                {
  
                    $push:   {"imageFolder":holder,
@@ -175,11 +176,12 @@ router.post('/imagePush',createdirectory,createLink,upload.single('myFile'),asyn
                 console.log('trying in linkstore')
                 console.log(imageContainer)
                 res.json({updatedImageHolder,success:true})
-        }
+        //}
           
       }
   }
   catch(error){
+    console.log(error)
       next(error)
   }
 

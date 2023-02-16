@@ -8,11 +8,26 @@ const linkingid = mongoose.Types.ObjectId
 
 //middleware to get the id of the textholder
 const createLink = async(req,res,next)=>{
-    const textholder = await textObject.findOne({userid:req.user.id})
-    req.textId = textholder._id
-    console.log(req.textId)
-    console.log(textholder._id)
-    next()
+    const textholder = await textObject.findOne({folderid:req.query?.folder})
+    const folderholder = await folderModel.findById(req.query?.folder)
+    console.log(folderholder.textId)
+    console.log(textholder)
+    console.log(folderholder)
+    if(folderholder.textId===undefined || textholder=== null){
+        const textData =   await textObject.create({
+            folderid:req.query.folder,
+            userid: req.user.id
+        })
+        req.textId = textData._id
+        next()
+    }
+    else{
+        req.textId = textholder._id
+        console.log('found text id')
+        console.log(req.textId)
+        next()
+    }
+
 }
 
 router.get('/:id', async(req,res,next)=>{
@@ -48,30 +63,7 @@ router.post('/', async (req,res,next)=>{
         }
         else{
 
-            const textdata = await textObject.findOne({_id:req.textId})
             
-            if(textdata == null){
-
-                const {text, description, title ,source} = req.body.textholder
-                const textData =   await textObject.create({
-                    textholder:{text,
-                    description,
-                    title,
-                    source,
-                    },
-                    userid: req.user.id
-                })
-    
-                    const linkparam = linkingid(linkData._id)
-                    const textContainer = await folderModel.findByIdAndUpdate(req.query?.folder,{textId:linkparam},{new:true}).populate('textId')
-                    
-                    //res.json({linkData:linkData,success:true})
-                    res.json({textData:textData,success:true})
-                    
-                
-            }
-
-            else{
                 const {link, description ,title ,source} = req.body.linkholder
                 const holder = {text,description,title,source}
 
@@ -88,7 +80,7 @@ router.post('/', async (req,res,next)=>{
                 const linkContainer = await folderModel.findByIdAndUpdate(req.query?.folder,{textId:linkparam},{new:true}).populate('textId')
                 //res.json({updatedLink:updatedLink,success:true})
                 res.json({linkContent:linkContainer,success:true})
-            }
+            
         }
 
             
