@@ -61,6 +61,20 @@ const createdirectory = async(req,res,next)=>{
     
   next()
   } 
+  else{
+
+    console.log('making path')
+      fs.mkdirSync(path.join(__dirname,'..','..', 'public','bio',`${SpecificUser}`), { recursive: true },(err) => {
+        //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
+        console.log(__dirname)
+        if (err) {
+            return console.error(err);
+        }
+        console.log('Directory created successfully!');
+    });
+
+    next()
+  }
     
   }
 
