@@ -18,9 +18,13 @@ const imageAddress = '../../public/bio'
 //create directory to store user images in user profile
 const createdirectory = async(req,res,next)=>{
   const SpecificUser = req.user.id;
-  const userInfo = await Userbio.find({userid:req.user.id});
-  if(userInfo[0]){
-    if(userInfo[0].avatarName){
+  const userInfo = await Userbio.findOne({userinfo:req.user.id});
+  /*console.log(req.user.id)
+  console.log(`in middleware ${userInfo.json}`)
+  console.log(userInfo[0])*/
+  if(userInfo){
+    if(userInfo.avatarName){
+      //if user's avatarname already exist then we need to delete the image from the directory before creating a new one 
       console.log('deleting path')
       fs.rmdirSync(path.join(__dirname,'..','..','public','bio',`${SpecificUser}`),{ recursive: true },(err) => {
         //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
@@ -56,26 +60,24 @@ const createdirectory = async(req,res,next)=>{
     }
     
   next()
+  } 
+    
   }
 
-  else{
-    console.log(typeof userInfo[0])
-    console.log('a')
-    fs.mkdirSync(path.join(__dirname,'..','..', 'public','bio',`${SpecificUser}`), { recursive: true },(err) => {
+
+  const removeDirectory = async(req,res,next)=>{
+    const SpecificUser = req.user.id
+    fs.rmdirSync(path.join(__dirname,'..','..','public','bio',`${SpecificUser}`),{ recursive: true },(err) => {
       //console.log(path.join(__dirname,'..','..', `public/${SpecificUser}`))
       console.log(__dirname)
       if (err) {
           return console.error(err);
       }
-      console.log('Directory created successfully!');
-  });
-  next()
-  }
-  
-  
-    
-  }
+      console.log('Directory deleted successfully!');
 
+      next()
+  })
+  }
 
   const multerStorage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -109,11 +111,11 @@ const createdirectory = async(req,res,next)=>{
 //post-request to post an image as avatar on the user bio
 router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,next)=>{
   try{
-    
-    const biodata = await Userbio.find({userinfo:req.user.id})
+    console.log('in bio route')
+    const biodata = await Userbio.findOne({userinfo:req.user.id})
     console.log(biodata)
 
-    if(biodata[0]){
+    if(biodata){
 
       const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
         {
@@ -151,9 +153,9 @@ router.post('/usernamePush',async(req,res,next)=>{
     
 
     if(req.body.projectTitle){
-      const biodata = await Userbio.find({userinfo:req.user.id})
+      const biodata = await Userbio.findOne({userinfo:req.user.id})
 
-      if(biodata[0].projectTitle || biodata[0].avatarName){
+      if(biodata.projectTitle || biodata.avatarName){
         console.log('a')
         const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
           {
@@ -189,23 +191,23 @@ router.get('/bioUpdate', async(req,res,next)=>{
   console.log('a')
     try{
       console.log('b')
-        const userInfo = await Userbio.find({userinfo:req.user.id});
+        const userInfo = await Userbio.findOne({userinfo:req.user.id});
         console.log(userInfo)
-        if(userInfo[0]){
+        if(userInfo){
           
-          if(!userInfo[0].avatarName && !userInfo[0].projectTitle){
+          if(!userInfo.avatarName && !userInfo.projectTitle){
               res.send({avatarName:'https://savemyfile.onrender.com/avatar/newAvatar.png',success:true})
           }
-          else if(userInfo[0].avatarName && !userInfo[0].projectTitle){
-            res.status(200).send({avatarName:`https://savemyfile.onrender.com/bio/${req.user.id}/${userInfo[0].avatarName}`,success:true})
+          else if(userInfo.avatarName && !userInfo.projectTitle){
+            res.status(200).send({avatarName:`https://savemyfile.onrender.com/bio/${req.user.id}/${userInfo.avatarName}`,success:true})
           }
       
-          else if(userInfo[0].projectTitle && !userInfo[0].avatarName){
+          else if(userInfo.projectTitle && !userInfo.avatarName){
             res.status(200).send({projectTitle:userInfo.projectTitle,success:true})
           }
           else{
               
-              res.status(200).send({avatarName:`https://savemyfile.onrender.com/bio/${req.user.id}/${userInfo[0].avatarName}`,projectTitle:userInfo.projectTitle,success:true})
+              res.status(200).send({avatarName:`https://savemyfile.onrender.com/bio/${req.user.id}/${userInfo.avatarName}`,projectTitle:userInfo.projectTitle,success:true})
           }
         }
 
@@ -222,24 +224,26 @@ router.get('/bioUpdate', async(req,res,next)=>{
     
 })
 
-router.delete('/imagedelete',async(req,res,next)=>{
+router.delete('/imagedelete',removeDirectory,async(req,res,next)=>{
     try{
+      const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
+        {
 
-      const bioHolder = await Userbio.findOne({userinfo:req.user.id})
+            $set:   {"avatarName":'',
+                }
+            },
+            {new : true})
        console.log(bioHolder)
-       for(let i=0; i<imageHolder.imageFolder.length;i++){
-        if (bioHolder.avatarName === req.query.imagename){
-          console.log('a')
-            const imageHold = bioHolder.imageFolder
-            imgArray = imageHold.splice(i,1)
-        }
-    }}
+       res.send({avatarName:'https://savemyfile.onrender.com/avatar/newAvatar.png',success:true})
+      }
     catch(error){
       next(error)
     }
 })
 
-router.post('/',protect,async(req,res,next)=>{
+
+
+/*router.post('/',protect,async(req,res,next)=>{
     console.log('first step in')
     try {
         if(!req.body.Usernamebio ){
@@ -310,6 +314,6 @@ router.delete('/:id',async(req,res,next)=>{
     catch(error){
         next(error)
     }
-})
+}) */
 
 module.exports = router
