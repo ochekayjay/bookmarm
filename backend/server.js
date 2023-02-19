@@ -10,6 +10,9 @@ const File = require('./model/imageModel');
 const fs = require('fs');
 const imageModelTest = require('./model/newTestModel')
 const multer = require('multer')
+const linkRouter = require('./ROUTES/linkStore')
+const textRouter = require('./ROUTES/textStore')
+const imageRouter = require('./ROUTES/imageStore')
 
 const app  = express();
 
@@ -119,8 +122,10 @@ const upload = multer({
 app.use('/bio',protect,require('./ROUTES/bioStore'))
 //app.use('/links',require('./ROUTES/linkStore'))
 //app.use('/text',require('./ROUTES/textStore'))
+app.use('/link',protect,linkRouter)
+app.use('/text',protect,textRouter)
+app.use('/image',protect,imageRouter)
 app.use('/auth',require('./ROUTES/Auth pages/authentication'))
 app.use('/folder',protect,require('./ROUTES/folderStore'))
-app.use('/imageLink',require('./ROUTES/imageStore'))
 app.use(catchError)
 app.listen(port, ()=> console.log(`${port} in here`))

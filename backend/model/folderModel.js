@@ -1,6 +1,4 @@
 const mongoose = require('mongoose')
-const [linkObject] = require('./userStoreModel') 
-
 
 const folder = mongoose.Schema({
     

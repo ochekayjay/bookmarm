@@ -6,7 +6,20 @@ const fileSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  imageFolder: [{nameofimage:String,title:String,source:String}],
+ path:{
+  type:String,
+  required:true
+ },
+  nameofimage:{
+    type:String,
+    required:true
+  },
+  title:{
+    type:String,
+    required:true},
+  
+  source:{
+    type:String},
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
