@@ -169,7 +169,7 @@ router.post('/usernamePush',async(req,res,next)=>{
     if(req.body.projectTitle){
       const biodata = await Userbio.findOne({userinfo:req.user.id})
 
-      if(biodata.projectTitle || biodata.avatarName){
+      if(biodata?.projectTitle || biodata?.avatarName){
         console.log('a')
         const updatedImageHolder = await Userbio.findOneAndUpdate({userinfo:req.user.id},
           {
