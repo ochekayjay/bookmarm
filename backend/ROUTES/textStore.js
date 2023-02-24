@@ -5,13 +5,13 @@ const router = express.Router()
 const {getAlltexts,getFolderTexts,getOneText,createText,deleteText} = require('../controller/textController')
 
 
-router.get('/getAllLinks',getAlltexts)
+router.get('/getAllTexts',getAlltexts)
 
 router.get('/:folderId',getFolderTexts)
 
-router.get('/:linkid', getOneText)
+router.get('/:textid', getOneText)
 
-router.post('/createLink',createText)
+router.post('/createText',createText)
 
 router.delete('/:delid',deleteText)
 

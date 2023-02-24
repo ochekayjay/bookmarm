@@ -34,7 +34,7 @@ const textObj =  await textModel.create({
             title: req.body.title,
             source: req.body.source,
             userid : req.user.id,
-            folderid : req.header.folder
+            folderid : req.headers.folder
     })
 
     res.json(textObj)
