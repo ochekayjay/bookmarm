@@ -117,7 +117,8 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
                      title:imageobj.title,
                      source: imageobj.source,
                      user: imageobj.user,
-                     folder: imageobj.folder})
+                     folder: imageobj.folder,
+                    path: imageobj.path})
            
        
            
