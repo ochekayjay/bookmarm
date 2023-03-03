@@ -18,18 +18,20 @@ const { imageCreator,getAllImagesinFolder,getAllUserImages, getOneImage, deleteI
 
 //middleware for creating directory
 const createdirectory = async(req,res,next)=>{
+  console.log('first a')
   //const imgModel = await imageModel.findOne({folderid:req.header.folderid}) 
   const SpecificUser = req.user.id;
   const folderId = req.headers.folderid;
 console.log('a')
 //if(!imgModel.path){
-  fs.mkdir(path.join(__dirname,'..','..', 'public','imageCollection',`${SpecificUser}`,`${folderId}`), { recursive: true },(err) => {
+  fs.mkdirSync(path.join(__dirname,'..','..', 'public','imageCollection',`${SpecificUser}`,`${folderId}`), { recursive: true },(err) => {
     console.log(path.join(__dirname,'..','..', `public/imageCollection/${SpecificUser}/${folderId}`))
     console.log(__dirname)
     if (err) {
         return console.error(err);
     }
     console.log('Directory created successfully!');
+    next()
 });
 
 //}
@@ -53,6 +55,7 @@ const multerStorage = multer.diskStorage({
       const SpecificUser = req.user.id;
       const folderId = req.headers.folderid;
       //cb(new Error("Not an Image"), true)
+      
       cb(null, path.join(__dirname,'..','..', `public/imageCollection/${SpecificUser}/${folderId}`));
     },
     filename: (req, file, cb) => {
@@ -63,12 +66,15 @@ const multerStorage = multer.diskStorage({
   });
 
   const multerFilter = (req, file, cb) => {
+    console.log('in multer filter')
     const mimetypes = ["jpeg","png","JPG"]
+    
     if (!mimetypes.includes(file.mimetype.split("/")[1]) ) {
       console.log(file.mimetype.split("/")[1])
       cb(new Error("Not an Image"), false);
     } else {
       console.log('in multer else')
+      console.log(req.file)
       cb(null, true)
     }
   };
@@ -81,7 +87,48 @@ const multerStorage = multer.diskStorage({
 
 
 
-router.post('/imagePush',createdirectory,upload.single('myFile'),imageCreator)
+router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,next)=>{
+  const urlconstant = 'https://savemyfile.onrender.com/imageCollection/'
+  console.log('inside image controller')
+   try{
+     if(!req.body.title || !req.body.source){
+           
+       res.status(400)
+       throw new Error('kindly fill all fields')
+      
+       }
+ 
+       else{
+           console.log(req.body)
+           //console.log(file)
+          
+           const imageobj = await imageModel.create({
+            
+             path: `${urlconstant}/${req.user.id}/${req.headers.folderid}/${req.file.filename}`,
+             nameofimage : req.file.filename,
+             title:req.body.title,
+             source: req.body.source,
+             user: req.user.id,
+             folder: req.headers.folderid
+           })
+
+           res.json({
+                     nameofimage:imageobj.nameofimage,
+                     title:imageobj.title,
+                     source: imageobj.source,
+                     user: imageobj.user,
+                     folder: imageobj.folder})
+           
+       
+           
+       }
+   }
+   catch(error){
+     console.log(error)
+       next(error)
+   }
+ 
+ })
 
 router.get('/getFolderImages', getAllImagesinFolder)
 

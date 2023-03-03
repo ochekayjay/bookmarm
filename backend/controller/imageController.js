@@ -16,7 +16,9 @@ const imageCreator = async(req,res,next)=>{
         }
   
         else{
-      
+            console.log(req.body)
+            console.log(req.file)
+            console.log(req.headers)
             const imageobj = await imageModel.create({
              
               path: `${urlconstant}/${req.user.id}/${req.headers.folderid}/${req.file.filename}`,

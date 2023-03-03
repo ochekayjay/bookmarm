@@ -110,7 +110,7 @@ const createdirectory = async(req,res,next)=>{
 
   const multerFilter = (req, file, cb) => {
     if (file.mimetype.split("/")[1] === "img"||"png") {
-    
+        console.log('trial here')
       cb(null, true);
     } else {
     
@@ -127,7 +127,7 @@ const createdirectory = async(req,res,next)=>{
 //post-request to post an image as avatar on the user bio
 router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,next)=>{
   try{
-
+console.log('done')
     const biodata = await Userbio.findOne({userinfo:req.user.id})
    
 
