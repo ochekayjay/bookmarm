@@ -75,9 +75,8 @@ const imageCreator = async(req,res,next)=>{
                 try{
                         const imageFolder = await imageModel.findById(req.params.imageId)
                         console.log(imageFolder)
-                        const dat = path.join(__dirname,'..','..', 'public', 'imageCollection', `${SpecificUser}`, `${folderId}`, `${imageFolder.nameofimage}`);
-                        console.log(dat)
-                        fs.unlink(path.join(__dirname,'..','..', 'public', 'imageCollection', `${SpecificUser}`, `${folderId}`, `${imageFolder.nameofimage}`), err => {
+                        
+                        fs.unlinkSync(path.join(__dirname,'..','..', 'public', 'imageCollection', `${SpecificUser}`, `${folderId}`, `${imageFolder.nameofimage}`), err => {
                           if (err) throw err;
                         });
                       
