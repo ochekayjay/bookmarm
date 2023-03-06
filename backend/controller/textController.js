@@ -50,7 +50,8 @@ catch(error){
 const deleteText = async(req,res,next)=>{
     await textModel.findByIdAndDelete(req.params.delid)
 
-    res.json({message:'succesfully deleted'})
+    const folderTexts = await textModel.find({folderid:req.headers.folderid})
+    res.json({folderTexts,success:true})
 }
 
 

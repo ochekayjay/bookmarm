@@ -51,7 +51,10 @@ catch(error){
 const deleteLink = async(req,res,next)=>{
     await linkModel.findByIdAndDelete(req.params.delid)
 
-    res.json({message:'succesfully deleted'})
+    const folderLinks = await linkModel.find({folderid:req.headers.folderid})
+
+    res.json({folderLinks,success:true})
+
 }
 
 
