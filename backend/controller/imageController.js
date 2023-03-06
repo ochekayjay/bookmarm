@@ -21,7 +21,7 @@ const imageCreator = async(req,res,next)=>{
             console.log(req.headers)
             const imageobj = await imageModel.create({
              
-              path: `${urlconstant}/${req.user.id}/${req.headers.folderid}/${req.file.filename}`,
+        
               nameofimage : req.file.filename,
               title:req.body.title,
               source: req.body.source,
@@ -82,7 +82,7 @@ const imageCreator = async(req,res,next)=>{
                         });
                       
 
-                        imageFolder.remove()
+                        await imageModel.findByIdAndDelete(req.params.imageId)
 
                         const folderImages = await imageModel.find({folderid:req.headers.folderid})
 
