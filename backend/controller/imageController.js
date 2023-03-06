@@ -83,7 +83,11 @@ const imageCreator = async(req,res,next)=>{
                       
 
                         imageFolder.remove()
-                        res.json({message:'deleted sucessfully',success:true})
+
+                        const folderImages = await imageModel.find({folderid:req.headers.folderid})
+
+                        res.json({folderImages:folderImages})
+                
   
           
           
