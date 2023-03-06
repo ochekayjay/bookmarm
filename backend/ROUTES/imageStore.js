@@ -104,7 +104,7 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
           
            const imageobj = await imageModel.create({
             
-             path: `${urlconstant}${req.user.id}/${req.headers.folderid}/${req.file.filename}`,
+             
              nameofimage : req.file.filename,
              title:req.body.title,
              source: req.body.source,
@@ -118,7 +118,7 @@ router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,n
                      source: imageobj.source,
                      user: imageobj.user,
                      folder: imageobj.folder,
-                    path: imageobj.path})
+                    })
            
        
            

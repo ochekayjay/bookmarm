@@ -6,10 +6,6 @@ const fileSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
- path:{
-  type:String,
-  required:true
- },
   nameofimage:{
     type:String,
     required:true
