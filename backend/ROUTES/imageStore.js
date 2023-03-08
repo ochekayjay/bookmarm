@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require('fs');
 const foldermodel = require('../model/folderModel');
 const usermodel = require('../model/linkModel');
-const { imageCreator,getAllImagesinFolder,getAllUserImages, getOneImage, deleteImage } = require('../controller/imageController');
+const { imageCreator,getAllImagesinFolder,getAllUserImages, getOneImage, deleteImage } = require('../controller/imagesController');
 
 
 //validate ids
@@ -24,8 +24,8 @@ const createdirectory = async(req,res,next)=>{
   const folderId = req.headers.folderid;
 console.log('a')
 //if(!imgModel.path){
-  fs.mkdirSync(path.join(__dirname,'..','..', 'public','imageCollection',`${SpecificUser}`,`${folderId}`), { recursive: true },(err) => {
-    console.log(path.join(__dirname,'..','..', `public/imageCollection/${SpecificUser}/${folderId}`))
+  fs.mkdirSync(path.join(__dirname,'..','..', 'public','imagesCollection',`${SpecificUser}`,`${folderId}`), { recursive: true },(err) => {
+    console.log(path.join(__dirname,'..','..', `public/imagesCollection/${SpecificUser}/${folderId}`))
     console.log(__dirname)
     if (err) {
         return console.error(err);
@@ -56,7 +56,7 @@ const multerStorage = multer.diskStorage({
       const folderId = req.headers.folderid;
       //cb(new Error("Not an Image"), true)
       
-      cb(null, path.join(__dirname,'..','..', 'public','imageCollection',`${SpecificUser}`,`${folderId}`));
+      cb(null, path.join(__dirname,'..','..', 'public','imagesCollection',`${SpecificUser}`,`${folderId}`));
     },
     filename: (req, file, cb) => {
       
@@ -88,7 +88,7 @@ const multerStorage = multer.diskStorage({
 
 
 router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,next)=>{
-  const urlconstant = 'https://savemyfile.onrender.com/imageCollection/'
+  const urlconstant = 'https://savemyfile.onrender.com/imagesCollection/'
   console.log('inside image controller')
    try{
      if(!req.body.title || !req.body.source){
