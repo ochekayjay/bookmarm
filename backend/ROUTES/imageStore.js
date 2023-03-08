@@ -24,15 +24,14 @@ const createdirectory = async(req,res,next)=>{
   const folderId = req.headers.folderid;
 console.log('a')
 //if(!imgModel.path){
-  const folderpath = path.join(__dirname,'..','..', 'public','imagesCollection',`${SpecificUser}`,`${folderId}`)
+  const folderpath = path.join(__dirname,'..','..', 'public','imagesCollection')
   if(fs.existsSync(folderpath)){
 
       next()
     }
     else{
-    fs.mkdirSync(path.join(__dirname,'..','..', 'public','imagesCollection',`${SpecificUser}`,`${folderId}`), { recursive: true },(err) => {
-      console.log(path.join(__dirname,'..','..', `public/imagesCollection/${SpecificUser}/${folderId}`))
-      console.log(__dirname)
+    fs.mkdirSync(path.join(__dirname,'..','..', 'public','imagesCollection'), { recursive: true },(err) => {
+      
       if (err) {
           return console.error(err);
       }
@@ -63,7 +62,7 @@ const multerStorage = multer.diskStorage({
       const folderId = req.headers.folderid;
       //cb(new Error("Not an Image"), true)
       
-      cb(null, path.join(__dirname,'..','..', 'public','imagesCollection',`${SpecificUser}`,`${folderId}`));
+      cb(null, path.join(__dirname,'..','..', 'public','imagesCollection'));
     },
     filename: (req, file, cb) => {
       
