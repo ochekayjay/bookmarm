@@ -24,15 +24,18 @@ const createdirectory = async(req,res,next)=>{
   const folderId = req.headers.folderid;
 console.log('a')
 //if(!imgModel.path){
-  fs.mkdirSync(path.join(__dirname,'..','..', 'public','imagesCollection',`${SpecificUser}`,`${folderId}`), { recursive: true },(err) => {
-    console.log(path.join(__dirname,'..','..', `public/imagesCollection/${SpecificUser}/${folderId}`))
-    console.log(__dirname)
-    if (err) {
-        return console.error(err);
-    }
-    console.log('Directory created successfully!');
-    next()
-});
+  if(!fs.existsSync(path.join(__dirname,'..','..', 'public','imagesCollection',`${SpecificUser}`,`${folderId}`))){
+
+    fs.mkdirSync(path.join(__dirname,'..','..', 'public','imagesCollection',`${SpecificUser}`,`${folderId}`), { recursive: true },(err) => {
+      console.log(path.join(__dirname,'..','..', `public/imagesCollection/${SpecificUser}/${folderId}`))
+      console.log(__dirname)
+      if (err) {
+          return console.error(err);
+      }
+      console.log('Directory created successfully!');
+      next()
+  });
+  }
 
 //}
 
