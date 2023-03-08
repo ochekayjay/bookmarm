@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require('fs');
 const foldermodel = require('../model/folderModel');
 const usermodel = require('../model/linkModel');
-const { imageCreator,getAllImagesinFolder,getAllUserImages, getOneImage, deleteImage } = require('../controller/imagesController');
+const { imageCreator,getAllImagesinFolder,getAllUserImages, getOneImage, deleteImage } = require('../controller/imageController');
 
 
 //validate ids
