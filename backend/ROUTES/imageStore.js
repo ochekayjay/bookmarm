@@ -56,7 +56,7 @@ const multerStorage = multer.diskStorage({
       const folderId = req.headers.folderid;
       //cb(new Error("Not an Image"), true)
       
-      cb(null, path.join(__dirname,'..','..', `public/imageCollection/${SpecificUser}/${folderId}`));
+      cb(null, path.join(__dirname,'..','..', 'public','imageCollection',`${SpecificUser}`,`${folderId}`));
     },
     filename: (req, file, cb) => {
       
