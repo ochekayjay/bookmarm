@@ -4,7 +4,7 @@ const imageModel = require('../model/imageModel')
 const fs = require('fs');
 
 
-const urlconstant = 'https://savemyfile.onrender.com/imagesCollection/'
+const urlconstant = 'https://savemyfile.onrender.com/avatar/'
 const imageCreator = async(req,res,next)=>{
    console.log('inside image controller')
     try{
@@ -76,7 +76,7 @@ const imageCreator = async(req,res,next)=>{
                         const imageFolder = await imageModel.findById(req.params.imageId)
                         console.log(imageFolder)
                         
-                        fs.unlinkSync(path.join(__dirname,'..','..', 'public', 'imagesCollection', `${SpecificUser}`, `${folderId}`, `${imageFolder.nameofimage}`), err => {
+                        fs.unlinkSync(path.join(__dirname,'..','..', 'public', 'avatar', `${SpecificUser}`, `${folderId}`, `${imageFolder.nameofimage}`), err => {
                           if (err) throw err;
                         });
                       

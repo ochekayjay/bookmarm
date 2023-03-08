@@ -62,7 +62,7 @@ const multerStorage = multer.diskStorage({
       const folderId = req.headers.folderid;
       //cb(new Error("Not an Image"), true)
       
-      cb(null, path.join(__dirname,'..','..', 'public/imagesCollection'));
+      cb(null, path.join(__dirname,'..','..', 'public','avatar'));
     },
     filename: (req, file, cb) => {
       
@@ -94,7 +94,7 @@ const multerStorage = multer.diskStorage({
 
 
 router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
-  const urlconstant = 'https://savemyfile.onrender.com/imagesCollection/'
+  const urlconstant = 'https://savemyfile.onrender.com/avatar/'
   console.log('inside image controller')
    try{
      if(!req.body.title || !req.body.source){
