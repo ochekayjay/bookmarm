@@ -17,7 +17,7 @@ const { imageCreator,getAllImagesinFolder,getAllUserImages, getOneImage, deleteI
 
 
 //middleware for creating directory
-const createdirectory = async(req,res,next)=>{
+/*const createdirectory = async(req,res,next)=>{
   console.log('first a')
   //const imgModel = await imageModel.findOne({folderid:req.header.folderid}) 
   const SpecificUser = req.user.id;
@@ -42,12 +42,12 @@ console.log('a')
 
 //}
 
-/*else{
+else{
   req.pathname = imgModel.path
-}*/
+}
   
   next()
-}
+}*/
 
 
 
@@ -62,7 +62,7 @@ const multerStorage = multer.diskStorage({
       const folderId = req.headers.folderid;
       //cb(new Error("Not an Image"), true)
       
-      cb(null, path.join(__dirname,'..','..', 'public','imagesCollection'));
+      cb(null, path.join(__dirname,'..','..', 'public/imagesCollection'));
     },
     filename: (req, file, cb) => {
       
