@@ -93,7 +93,7 @@ const multerStorage = multer.diskStorage({
 
 
 
-router.post('/imagePush',createdirectory,upload.single('myFile'),async(req,res,next)=>{
+router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
   const urlconstant = 'https://savemyfile.onrender.com/imagesCollection/'
   console.log('inside image controller')
    try{
