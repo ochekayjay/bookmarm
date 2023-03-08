@@ -135,6 +135,23 @@ app.get('/filegetter',(req,res)=>{
   })
   //res.json({arr});
 })
+
+app.get('/biogetter',(req,res)=>{
+  const arr = []
+  console.log(path.join(__dirname,"..","public","bio"))
+  fs.readdir(path.join(__dirname,"..","public","bio","63fcb7de73ffc7b201b1aee5"),(err, files) => {
+    if (err)
+      res.json({erro:err});
+    else {
+      res.json({files});
+      files.forEach(file => {
+        arr.push(file)
+        
+      })
+    }
+  })
+  //res.json({arr});
+})
 //app.use('/links',require('./ROUTES/linkStore'))
 //app.use('/text',require('./ROUTES/textStore'))
 app.use('/link',protect,linkRouter)
