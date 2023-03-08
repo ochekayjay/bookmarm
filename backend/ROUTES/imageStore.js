@@ -32,7 +32,7 @@ console.log('a')
       if (err) {
           return console.error(err);
       }
-      console.log('Directory created successfully!');
+      console.log('Directory created orsuccessfully!');
       next()
   });
   }
