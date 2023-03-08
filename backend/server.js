@@ -120,8 +120,8 @@ const upload = multer({
 
 app.use('/bio',protect,require('./ROUTES/bioStore'))
 app.get('/filegetter',(req,res)=>{
-  console.log(path.join(__dirname,"..","public"))
-  fs.readdir(path.join(__dirname,"..","public"),(err, files) => {
+  console.log(path.join(__dirname,"..","public","bio"))
+  fs.readdir(path.join(__dirname,"..","public","bio"),(err, files) => {
     if (err)
       res.json({erro:err});
     else {
