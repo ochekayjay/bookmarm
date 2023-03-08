@@ -119,6 +119,17 @@ const upload = multer({
 
 
 app.use('/bio',protect,require('./ROUTES/bioStore'))
+app.get('/filegetter',(req,res)=>{
+  fs.readdir(path.join(__dirname,"public"),(err, files) => {
+    if (err)
+      res.json({erro:err});
+    else {
+      files.forEach(file => {
+        res.json({file});
+      })
+    }
+  })
+})
 //app.use('/links',require('./ROUTES/linkStore'))
 //app.use('/text',require('./ROUTES/textStore'))
 app.use('/link',protect,linkRouter)
