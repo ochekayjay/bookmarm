@@ -49,7 +49,7 @@ const imageCreator = async(req,res,next)=>{
 
 
   const getAllImagesinFolder = async(req,res,next)=>{
-          const folderImages = await imageModel.find({folderid:req.headers.folderid})
+          const folderImages = await imageModel.find({folder:req.headers.folderid})
 
           res.json({folderImages:folderImages})
 
