@@ -122,7 +122,7 @@ app.use('/bio',protect,require('./ROUTES/bioStore'))
 app.get('/filegetter',(req,res)=>{
   const arr = []
   console.log(path.join(__dirname,"..","public","bio"))
-  fs.readdir(path.join(__dirname,"..","public","bio"),(err, files) => {
+  fs.readdir(path.join(__dirname,"..","public"),(err, files) => {
     if (err)
       res.json({erro:err});
     else {
