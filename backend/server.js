@@ -126,13 +126,14 @@ app.get('/filegetter',(req,res)=>{
     if (err)
       res.json({erro:err});
     else {
+      res.json({files});
       files.forEach(file => {
         arr.push(file)
         
       })
     }
   })
-  res.json({arr});
+  //res.json({arr});
 })
 //app.use('/links',require('./ROUTES/linkStore'))
 //app.use('/text',require('./ROUTES/textStore'))
