@@ -94,7 +94,9 @@ const multerStorage = multer.diskStorage({
 
 
 router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
-  const urlconstant = 'https://savemyfile.onrender.com/avatar/'
+  const urlconstant = path.join(__dirname,'..','..', 'public','avatar')
+
+  //why does this current urlconstant work as opposed http:localhost//5000
   console.log('inside image controller')
    try{
     console.log(req.body)
