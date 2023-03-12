@@ -65,7 +65,7 @@ const imageCreator = async(req,res,next)=>{
   const getOneImage = async(req,res,next)=>{
     const imageData = await imageModel.findById(req.params.id)
     res.setHeader('Content-Type',imageData.imageType)
-    res.send(imageData.image)
+    res.send(imageData.image.buffer)
     res.end()
   }
 
