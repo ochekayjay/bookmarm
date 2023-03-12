@@ -13,6 +13,7 @@ const multer = require('multer')
 const linkRouter = require('./ROUTES/linkStore')
 const textRouter = require('./ROUTES/textStore')
 const imageRouter = require('./ROUTES/imageStore')
+const { getOneImage } = require('./controller/imageController')
 
 const app  = express();
 
@@ -174,6 +175,7 @@ app.get('/foldergetter',(req,res)=>{
 //app.use('/text',require('./ROUTES/textStore'))
 app.use('/link',protect,linkRouter)
 app.use('/text',protect,textRouter)
+app.get('/image/getImage/:id',getOneImage)
 app.use('/image',protect,imageRouter)
 app.use('/auth',require('./ROUTES/Auth pages/authentication'))
 app.use('/folder',protect,require('./ROUTES/folderStore'))

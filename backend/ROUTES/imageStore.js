@@ -145,8 +145,6 @@ router.get('/getFolderImages', getAllImagesinFolder)
 
 router.get('/getUserImages', getAllUserImages)
 
-router.get('/getImage/:id', getOneImage)
-
 router.delete('/:imageId', deleteImage)
 
 
