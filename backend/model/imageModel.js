@@ -2,6 +2,8 @@ const mongoose = require("mongoose");
 
 // Creating a Schema for uploaded files
 const fileSchema = new mongoose.Schema({
+  image: Buffer,
+  imageType: String,
   createdAt: {
     type: Date,
     default: Date.now,

@@ -97,6 +97,7 @@ router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
   const urlconstant = 'https://savemyfile.onrender.com/avatar/'
   console.log('inside image controller')
    try{
+    console.log(req.body)
      if(!req.body.title || !req.body.source){
            
        res.status(400)
@@ -105,12 +106,12 @@ router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
        }
  
        else{
-           console.log(req.body)
-           //console.log(file)
-          
-           const imageobj = await imageModel.create({
-            
-             
+           const holder = fs.readFileSync(path.join(`${urlconstant}`,`${req.file.filename}`))
+       
+           console.log(holder)
+           const imageobj = await imageModel.create({          
+             image:holder,
+             imageType:req.file.mimetype,
              nameofimage : req.file.filename,
              title:req.body.title,
              source: req.body.source,
@@ -119,6 +120,7 @@ router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
            })
 
            res.json({
+                    id:imageobj._id,
                      nameofimage:imageobj.nameofimage,
                      title:imageobj.title,
                      source: imageobj.source,
