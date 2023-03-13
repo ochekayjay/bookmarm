@@ -72,12 +72,6 @@ const imageCreator = async(req,res,next)=>{
     const SpecificUser = req.user.id;
     const folderId = req.headers.folderid;
                 try{
-                        const imageFolder = await imageModel.findById(req.params.imageId)
-                    
-                        
-                        fs.unlinkSync(path.join(__dirname,'..','..', 'public', 'avatar', `${imageFolder.nameofimage}`), err => {
-                          if (err) throw err;
-                        });
                       
 
                         await imageModel.findByIdAndDelete(req.params.imageId)
