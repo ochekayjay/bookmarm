@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const urlconstant = 'https://savemyfile.onrender.com/avatar/'
 const imageCreator = async(req,res,next)=>{
-   console.log('inside image controller')
+
     try{
       if(!req.body.title || !req.body.source){
             
@@ -16,9 +16,7 @@ const imageCreator = async(req,res,next)=>{
         }
   
         else{
-            console.log(req.body)
-            console.log(req.file)
-            console.log(req.headers)
+            
             const imageobj = await imageModel.create({
              
         
@@ -64,22 +62,18 @@ const imageCreator = async(req,res,next)=>{
 
   const getOneImage = async(req,res,next)=>{
     const imageData = await imageModel.findById(req.params.id)
-    //res.setHeader('Content-Type',imageData.imageType)
-    console.log(req.params.id)
-    res.send(imageData.image.buffer)
-    /*console.log(imageData)
-    res.send(imageData.image.buffer)
-    res.end()*/
+    const bufferData = Buffer.from(imageData.image.buffer)
+    res.setHeader('Content-Type',imageData.imageType)
+    res.send(bufferData)
   }
 
 
   const deleteImage = async(req,res,next)=>{
-  console.log('inside delete')
     const SpecificUser = req.user.id;
     const folderId = req.headers.folderid;
                 try{
                         const imageFolder = await imageModel.findById(req.params.imageId)
-                        console.log(imageFolder)
+                    
                         
                         fs.unlinkSync(path.join(__dirname,'..','..', 'public', 'avatar', `${imageFolder.nameofimage}`), err => {
                           if (err) throw err;

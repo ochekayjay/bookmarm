@@ -175,7 +175,7 @@ app.get('/foldergetter',(req,res)=>{
 //app.use('/text',require('./ROUTES/textStore'))
 app.use('/link',protect,linkRouter)
 app.use('/text',protect,textRouter)
-app.get('/imager/getImage/:id',getOneImage)
+app.get('/image/getImage/:id',getOneImage)
 app.use('/image',protect,imageRouter)
 app.use('/auth',require('./ROUTES/Auth pages/authentication'))
 app.use('/folder',protect,require('./ROUTES/folderStore'))

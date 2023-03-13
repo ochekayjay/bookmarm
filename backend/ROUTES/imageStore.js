@@ -72,15 +72,14 @@ const multerStorage = multer.diskStorage({
   });
 
   const multerFilter = (req, file, cb) => {
-    console.log('in multer filter')
+    
     const mimetypes = ["jpeg","png","JPG"]
     
     if (!mimetypes.includes(file.mimetype.split("/")[1]) ) {
-      console.log(file.mimetype.split("/")[1])
+      
       cb(new Error("Not an Image"), false);
     } else {
-      console.log('in multer else')
-      console.log(req.file)
+      
       cb(null, true)
     }
   };
@@ -97,9 +96,9 @@ router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
   const urlconstant = path.join(__dirname,'..','..', 'public','avatar')
 
   //why does this current urlconstant work as opposed http:localhost//5000
-  console.log('inside image controller')
+  
    try{
-    console.log(req.body)
+    
      if(!req.body.title || !req.body.source){
            
        res.status(400)
@@ -110,7 +109,7 @@ router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
        else{
            const holder = fs.readFileSync(path.join(`${urlconstant}`,`${req.file.filename}`))
        
-           console.log(holder)
+          
            const imageobj = await imageModel.create({          
              image:holder,
              imageType:req.file.mimetype,
