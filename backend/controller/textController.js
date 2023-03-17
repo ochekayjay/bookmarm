@@ -25,7 +25,7 @@ const createText = async(req,res,next)=>{
 
     try{
     if(!req.body.text || !req.body.description || !req.body.title){
-        res.json({message : 'fill-in all neccessary details.'})
+        res.json({status:"error",message : 'fill-in all neccessary details.'})
     }
     else {
 const textObj =  await textModel.create({

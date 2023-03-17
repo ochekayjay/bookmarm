@@ -101,9 +101,8 @@ router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
     
      if(!req.body.title || !req.body.source){
            
-       res.status(400)
-       throw new Error('kindly fill all fields')
-      
+       res.status(400).json({status:"error",message:"kindly fill all fields"})
+       
        }
  
        else{

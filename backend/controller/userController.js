@@ -6,15 +6,13 @@ const jwt = require('jsonwebtoken')
 const register = async(req,res,next)=>{
 try{
     if(!req.body.Email || !req.body.Password || !req.body.Username){
-        res.status(400)
-        throw new Error('Fill all fields')
+        res.status(400).json({status:'error',message:'Fill all fields'})
+    
     }
    const {Username,Password,Email} = req.body
    const exisitingUser = await User.findOne({Email})
    if(exisitingUser){
-       res.status(400)
-       throw new Error('User already exists')
-       
+       res.status(400).json({status:'error',message:'User already exists'})
    }
 
    const seed = await bcrypt.genSalt(10)

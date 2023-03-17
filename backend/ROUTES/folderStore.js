@@ -11,8 +11,8 @@ router.get('/',async (req,res,next)=>{
             res.status(200).json({folderdata:folderdata,success:true})
         }
         else{
-            res.status(400)
-            throw new Error ('folder does not exist')
+            res.status(400).json({status:"error",message:"folder does not exist"})
+        
         }
     }
     catch(error){
@@ -23,8 +23,8 @@ router.get('/',async (req,res,next)=>{
 router.post('/', async (req,res,next)=>{
     try{
         if(!req.body.name){
-            res.status(400)
-            throw new Error('fill-in name of folder')
+            res.status(400).json({status:'error',message:"fill-in name of folder"})
+            
         }
         else{
           
@@ -54,8 +54,8 @@ router.delete('/:id',async(req,res,next)=>{
     try{
         const folderholder = await folderModel.findById(req.params.id)
         if(!folderholder){
-            res.status(400)
-            throw new Error('this link does not exist')
+            res.status(400).json({status:"error",message:"this link does not exist"})
+
         }
         else{
             await folderholder.remove()

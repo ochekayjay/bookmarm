@@ -1,6 +1,7 @@
 
 const path = require("path");
 const imageModel = require('../model/imageModel')
+
 const fs = require('fs');
 
 
@@ -10,9 +11,7 @@ const imageCreator = async(req,res,next)=>{
     try{
       if(!req.body.title || !req.body.source){
             
-        res.status(400)
-        throw new Error('kindly fill all fields')
-       
+        res.status(400).json({status:"error",message:"kindly fill all fields"})
         }
   
         else{
@@ -76,7 +75,7 @@ const imageCreator = async(req,res,next)=>{
 
                         await imageModel.findByIdAndDelete(req.params.imageId)
 
-                        const folderImages = await imageModel.find({folderid:req.headers.folderid})
+                        const folderImages = await imageModel.find({folder:req.headers.folderid})
 
                         res.json({folderImages:folderImages})
                 
