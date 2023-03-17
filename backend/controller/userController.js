@@ -58,8 +58,8 @@ const login = async(req,res,next)=>{
        }
 
        else{
-           res.status(400)
-           throw new Error('User does not exist')
+           res.status(400).json({status:'error',message:'User does not exist'})
+    
        }
     }
     
