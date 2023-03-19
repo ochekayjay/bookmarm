@@ -8,13 +8,16 @@ const Link = mongoose.Schema({
         },
     description:{
         type:String,
-        required:true
+        required:true,
+        index: true
     },
     title:{
         type:String,
-        required: true},
+        required: true,
+        index: true},
     source:{
         type:String,
+        index: true
         },
     userid:{
         type: mongoose.Schema.Types.ObjectId,
@@ -31,6 +34,8 @@ const Link = mongoose.Schema({
     timestamps :true
 })
 
+
+Link.index([{ title: 'text'},{ source: 'text'},{ description: 'text'}])
 
 const linkObject = mongoose.model('link',Link)
 

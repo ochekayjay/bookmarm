@@ -18,7 +18,8 @@ const folder = mongoose.Schema({
     },
     name:{
         type:String,
-        required: true
+        required: true,
+        index: true
     },
     userid: {
         type: mongoose.Schema.Types.ObjectId,
@@ -28,5 +29,7 @@ const folder = mongoose.Schema({
 },{
     timestamps :true
 })
+
+folder.index({ name: 'text'})
 
 module.exports = mongoose.model('folderModel',folder)

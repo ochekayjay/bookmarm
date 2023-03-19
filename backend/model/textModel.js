@@ -4,7 +4,8 @@ const mongoose = require('mongoose')
 const Text = mongoose.Schema({
     text:{
         type:String,
-        required:true},
+        required:true,
+        index: true},
         
     description:{
         type:String,
@@ -12,10 +13,12 @@ const Text = mongoose.Schema({
         
     title:{
         type:String,
-        required:true},
+        required:true,
+        index: true},
         
     source:{
-        type: String
+        type: String,
+        index: true
     },
     
     userid:{
@@ -35,6 +38,7 @@ const Text = mongoose.Schema({
     timestamps :true
 })
 
+Text.index([{ title: 'text'},{ source: 'text'},{ text: 'text'}])
 
 const textObject = mongoose.model('text',Text)
 

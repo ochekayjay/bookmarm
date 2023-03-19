@@ -47,6 +47,35 @@ catch(error){
 }
 
 
+//search text
+
+const querySearchText = async(req,res,next)=>{
+    
+    try{
+        
+    const foundData = await textModel.aggregate([
+        {$match:{$text: 
+            {$search: req.query.message,
+            $caseSensitive: false}
+        }},{
+            $sort:{
+                count:{$meta:"textScore"},
+                _id: -1
+            }
+        }])
+
+        if(!foundData){
+            res.json({message:"text not found!"})
+        }
+        else{
+    res.json(foundData)
+    }}
+    catch(error){
+        next(error)
+    }
+}
+
+
 const deleteText = async(req,res,next)=>{
     await textModel.findByIdAndDelete(req.params.delid)
 
@@ -55,4 +84,4 @@ const deleteText = async(req,res,next)=>{
 }
 
 
-module.exports = {getAlltexts,getFolderTexts,getOneText,createText,deleteText}
+module.exports = {getAlltexts,getFolderTexts,getOneText,createText,deleteText,querySearchText}

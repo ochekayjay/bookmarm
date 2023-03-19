@@ -2,10 +2,12 @@ const express = require('express')
 const router = express.Router()
 
 
-const {getAlltexts,getFolderTexts,getOneText,createText,deleteText} = require('../controller/textController')
+const {getAlltexts,getFolderTexts,getOneText,createText,deleteText,querySearchText} = require('../controller/textController')
 
 
 router.get('/getAllTexts',getAlltexts)
+
+router.get('/search', querySearchText)
 
 router.get('/:folderId',getFolderTexts)
 

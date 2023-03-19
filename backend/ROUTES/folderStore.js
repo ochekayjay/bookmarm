@@ -46,6 +46,33 @@ router.post('/', async (req,res,next)=>{
 })
 
 
+//search for folder
+router.get('/search', async(req,res,next)=>{
+    
+    try{
+        
+    const foundData = await folderModel.aggregate([
+        {$match:{$text: 
+            {$search: req.query.message,
+            $caseSensitive: false}
+        }},{
+            $sort:{
+                count:{$meta:"textScore"},
+                _id: -1
+            }
+        }])
+        if(!foundData){
+            res.json({message:"no folders"})
+        }
+        else{
+
+            res.json(foundData)
+        }
+    }
+    catch(error){
+        next(error)
+    }
+})
 
 
 

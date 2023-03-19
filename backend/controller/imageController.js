@@ -90,4 +90,33 @@ const imageCreator = async(req,res,next)=>{
    
                 }
 
-  module.exports = {imageCreator,getAllImagesinFolder,getAllUserImages,getOneImage,deleteImage}
+  //search through image model
+
+  const querySearchImage = async(req,res,next)=>{
+    
+    try{
+        
+    const foundData = await textModel.aggregate([
+        {$match:{$text: 
+            {$search: req.query.message,
+            $caseSensitive: false}
+        }},{
+            $sort:{
+                count:{$meta:"textScore"},
+                _id: -1
+            }
+        }])
+
+        if(!foundData){
+            res.json({message:"image not found!"})
+        }
+        else{
+    res.json(foundData)
+    }}
+    catch(error){
+        next(error)
+    }
+}
+
+
+  module.exports = {imageCreator,getAllImagesinFolder,getAllUserImages,getOneImage,deleteImage,querySearchImage}

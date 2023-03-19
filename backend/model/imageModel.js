@@ -10,14 +10,17 @@ const fileSchema = new mongoose.Schema({
   },
   nameofimage:{
     type:String,
-    required:true
+    required:true,
+    index: true
   },
   title:{
     type:String,
-    required:true},
+    required:true,
+    index: true},
   
   source:{
-    type:String},
+    type:String,
+    index: true},
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -29,6 +32,8 @@ folder:{
   required: true
 }
 });
+
+fileSchema.index([{ title: 'text'},{ source: 'text'},{ nameofimage: 'text'}])
 
 // Creating a Model from that Schema
 const imageModel = mongoose.model("img", fileSchema);
