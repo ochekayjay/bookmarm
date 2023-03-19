@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require('fs');
 const foldermodel = require('../model/folderModel');
 const usermodel = require('../model/linkModel');
-const { imageCreator,getAllImagesinFolder,getAllUserImages, getOneImage, deleteImage } = require('../controller/imageController');
+const { imageCreator,getAllImagesinFolder,getAllUserImages, getOneImage, deleteImage,querySearchImage } = require('../controller/imageController');
 
 
 //validate ids
@@ -142,6 +142,8 @@ router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
 router.get('/getFolderImages', getAllImagesinFolder)
 
 router.get('/getUserImages', getAllUserImages)
+
+router.get('/search', querySearchImage)
 
 router.delete('/:imageId', deleteImage)
 
