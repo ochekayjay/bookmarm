@@ -59,26 +59,28 @@ const deleteLink = async(req,res,next)=>{
 
 //link search
 const querySearchLink = async(req,res,next)=>{
-    
     try{
-        
     const foundData = await linkModel.aggregate([
-        {$match:{$text: 
+        {$match:{
+            $and : [
+                {userid:
+                    req.user.id},
+                {$text: 
             {$search: req.query.message,
-            $caseSensitive: false}
-        }},{
+                $caseSensitive: false}
+        }]}},{
             $sort:{
                 count:{$meta:"textScore"},
                 _id: -1
             }
         }])
-
-        if(!foundData){
-            res.json({message:"link not found!"})
-        }
-        else{
-    res.json(foundData)
-    }}
+    if(!foundData){
+        res.json({message:"link not found!"})
+    }
+    else{
+res.json(foundData)
+}
+}
     catch(error){
         next(error)
     }

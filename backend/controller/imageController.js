@@ -96,23 +96,27 @@ const imageCreator = async(req,res,next)=>{
     
     try{
         
-    const foundData = await textModel.aggregate([
-        {$match:{$text: 
-            {$search: req.query.message,
+    const foundData =  await imageModel.aggregate([
+      {$match:{
+        $and : [
+            {user:
+                req.user.id},
+            {$text: 
+        {$search: req.query.message,
             $caseSensitive: false}
-        }},{
-            $sort:{
-                count:{$meta:"textScore"},
-                _id: -1
-            }
-        }])
-
-        if(!foundData){
-            res.json({message:"image not found!"})
+    }]}},{
+        $sort:{
+            count:{$meta:"textScore"},
+            _id: -1
         }
-        else{
-    res.json(foundData)
-    }}
+    }])
+if(!foundData){
+    res.json({message:"image not found!"})
+}
+else{
+res.json(foundData)
+}
+}
     catch(error){
         next(error)
     }

@@ -50,26 +50,28 @@ catch(error){
 //search text
 
 const querySearchText = async(req,res,next)=>{
-    
     try{
-        
-    const foundData = await textModel.aggregate([
-        {$match:{$text: 
-            {$search: req.query.message,
-            $caseSensitive: false}
-        }},{
-            $sort:{
-                count:{$meta:"textScore"},
-                _id: -1
-            }
-        }])
-
+        const foundData = await textModel.aggregate([
+            {$match:{
+                $and : [
+                    {userid:
+                        req.user.id},
+                    {$text: 
+                {$search: req.query.message,
+                    $caseSensitive: false}
+            }]}},{
+                $sort:{
+                    count:{$meta:"textScore"},
+                    _id: -1
+                }
+            }])
         if(!foundData){
             res.json({message:"text not found!"})
         }
         else{
     res.json(foundData)
-    }}
+    }
+    }
     catch(error){
         next(error)
     }
