@@ -5,7 +5,9 @@ const router = express.Router()
 
 
 router.get('/',async (req,res,next)=>{
+    
     try{
+    
         const folderdata = await folderModel.find({userid:req.user.id})
         if(folderdata){
             res.status(200).json({folderdata:folderdata,success:true})
@@ -48,21 +50,21 @@ router.post('/', async (req,res,next)=>{
 
 //search through user folder
 router.get('/search', async(req,res,next)=>{
+ console.log(req.params.user)
+    //console.log(`${req.query.message} value`)
     try{
-    const foundData = await folderModel.aggregate([
-        {$match:{
-            $and : [
-                {userid:
-                    req.user.id},
-                {$text: 
-            {$search: req.query.message,
-                $caseSensitive: false}
-        }]}},{
-            $sort:{
-                count:{$meta:"textScore"},
-                _id: -1
-            }
-        }])
+        
+        await folderModel.find({userid:req.user.id}).lean()
+        
+    
+        const foundData = await folderModel.aggregate([
+     
+        {$match:
+            {$text: 
+                {$search: req.query.message,
+                    $caseSensitive: false}} }
+    
+    ])       
     if(!foundData){
         res.json({message:"folder not found!"})
     }

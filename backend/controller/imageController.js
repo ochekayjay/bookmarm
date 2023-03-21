@@ -92,35 +92,33 @@ const imageCreator = async(req,res,next)=>{
 
   //search through image model
 
-  const querySearchImage = async(req,res,next)=>{
-    
-    try{
+  const querySearchImage  = async(req,res,next)=>{
+    console.log(req.params.user)
+       //console.log(`${req.query.message} value`)
+       try{
+           
+           await imageModel.find({userid:req.user.id}).lean()
+           
+       
+           const foundData = await imageModel.aggregate([
         
-    const foundData =  await imageModel.aggregate([
-      {$match:{
-        $and : [
-            {user:
-                req.user.id},
-            {$text: 
-        {$search: req.query.message,
-            $caseSensitive: false}
-    }]}},{
-        $sort:{
-            count:{$meta:"textScore"},
-            _id: -1
-        }
-    }])
-if(!foundData){
-    res.json({message:"image not found!"})
-}
-else{
-res.json(foundData)
-}
-}
-    catch(error){
-        next(error)
-    }
-}
+           {$match:
+               {$text: 
+                   {$search: req.query.message,
+                       $caseSensitive: false}} }
+       
+       ])       
+       if(!foundData){
+           res.json({message:"image not found!"})
+       }
+       else{
+   res.json(foundData)
+   }
+   }
+       catch(error){
+           next(error)
+       }
+   }
 
 
   module.exports = {imageCreator,getAllImagesinFolder,getAllUserImages,getOneImage,deleteImage,querySearchImage}
