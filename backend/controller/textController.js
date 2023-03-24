@@ -7,7 +7,7 @@ const getAlltexts = async(req,res,next)=>{
     const allTexts = await textModel.find({userid:req.user.id})
 
     if(allTexts[0]){
-        res.json({allLinks,success:true})
+        res.json({allTexts,success:true})
     }
     else{
         res.json({message:'No Text Data available!'})
