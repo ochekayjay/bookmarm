@@ -6,7 +6,13 @@ const textModel = require('../model/textModel')
 const getAlltexts = async(req,res,next)=>{
     const allTexts = await textModel.find({userid:req.user.id})
 
-    res.json({allTexts,success:true})
+    if(allTexts[0]){
+        res.json({allLinks,success:true})
+    }
+    else{
+        res.json({message:'No Text Data available!'})
+    }
+    
 }
 
 const getFolderTexts = async(req,res,next)=>{

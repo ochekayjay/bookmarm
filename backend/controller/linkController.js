@@ -6,8 +6,13 @@ const linkModel = require('../model/linkModel')
 
 const getAllLinks = async(req,res,next)=>{
     const allLinks = await linkModel.find({userid:req.user.id})
-
-    res.json({allLinks,success:true})
+    if(allLinks[0]){
+        res.json({allLinks,success:true})
+    }
+    else{
+        res.json({message:'No Link Data available!'})
+    }
+    
 }
 
 const getFolderLinks = async(req,res,next)=>{

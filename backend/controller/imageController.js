@@ -47,8 +47,13 @@ const imageCreator = async(req,res,next)=>{
 
   const getAllImagesinFolder = async(req,res,next)=>{
           const folderImages = await imageModel.find({folder:req.headers.folderid})
-
-          res.json({folderImages:folderImages})
+          if(folderImages[0]){
+            res.json({folderImages:folderImages})
+        }
+        else{
+            res.json({message:'No Image Data available!'})
+        }
+          
 
   }
 
