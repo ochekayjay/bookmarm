@@ -7,10 +7,10 @@ const getAlltexts = async(req,res,next)=>{
     const allTexts = await textModel.find({userid:req.user.id})
 
     if(allTexts[0]){
-        res.json({allTexts,success:true})
+        res.json({textdata:allTexts,success:true})
     }
     else{
-        res.json({message:'No Text Data available!'})
+        res.json({success:false,message:'No Text Data available!'})
     }
     
 }
@@ -18,7 +18,13 @@ const getAlltexts = async(req,res,next)=>{
 const getFolderTexts = async(req,res,next)=>{
     const textdata = await textModel.find({folderid:req.params.folderId})
 
-    res.json({textdata,success:true})
+    if(textdata[0]){
+        res.json({textdata,success:true})
+    }
+    else{
+        res.json({success:false,message:'No Text Data available!'})
+    }
+    
 }
 
 const getOneText = async(req,res,next)=>{
@@ -72,10 +78,11 @@ const querySearchText = async(req,res,next)=>{
        
        ])       
        if(!foundData){
-           res.json({message:"text not found!"})
+           res.json({success:false,message:"text not found!"})
        }
        else{
-   res.json(foundData)
+        res.json({textdata:foundData,success:true})
+   
    }
    }
        catch(error){
@@ -88,7 +95,13 @@ const deleteText = async(req,res,next)=>{
     await textModel.findByIdAndDelete(req.params.delid)
 
     const folderTexts = await textModel.find({folderid:req.headers.folderid})
-    res.json({folderTexts,success:true})
+    if(folderTexts[0]){
+        res.json({textdata:folderTexts,success:true})
+    }
+    else{
+        res.json({state:false,message:'empty text collection'})
+    }
+    
 }
 
 

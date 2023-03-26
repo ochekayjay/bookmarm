@@ -119,14 +119,14 @@ router.post('/imagePush',upload.single('myFile'),async(req,res,next)=>{
              folder: req.headers.folderid
            })
 
-           res.json({
+           res.json({success:true,imagedata:{
                     id:imageobj._id,
                      nameofimage:imageobj.nameofimage,
                      title:imageobj.title,
                      source: imageobj.source,
                      user: imageobj.user,
                      folder: imageobj.folder,
-                    })
+                    }})
            
        
            

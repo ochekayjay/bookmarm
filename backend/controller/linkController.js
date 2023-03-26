@@ -7,18 +7,23 @@ const linkModel = require('../model/linkModel')
 const getAllLinks = async(req,res,next)=>{
     const allLinks = await linkModel.find({userid:req.user.id})
     if(allLinks[0]){
-        res.json({allLinks,success:true})
+        res.json({linkdata:allLinks,success:true})
     }
     else{
-        res.json({message:'No Link Data available!'})
+        res.json({success:false,message:'No Link Data available!'})
     }
     
 }
 
 const getFolderLinks = async(req,res,next)=>{
     const folderLinks = await linkModel.find({folderid:req.params.folderId})
-
-    res.json({folderLinks,success:true})
+    if(folderLinks[0]){
+        res.json({linkdata:folderLinks,success:true})
+    }
+    else{
+        res.json({state:false,message:'No link Data Available'})
+    }
+    
 }
 
 const getOneLink = async(req,res,next)=>{
@@ -43,7 +48,7 @@ const linkObj =  await linkModel.create({
             folderid : req.headers.folderid
     })
 
-    res.json(linkObj)
+    res.json({linkdata:linkObj,success:true})
 }
 }
 
@@ -58,7 +63,13 @@ const deleteLink = async(req,res,next)=>{
 
     const folderLinks = await linkModel.find({folderid:req.headers.folderid})
 
-    res.json({folderLinks,success:true})
+    if(folderLinks[0]){
+        res.json({linkdata:folderLinks,success:true})
+    }
+    else{
+        res.json({success:false,message:'no link Data available.'})
+    }
+    
 
 }
 
@@ -82,10 +93,10 @@ const querySearchLink = async(req,res,next)=>{
        
        ])       
        if(!foundData){
-           res.json({message:"link not found!"})
+           res.json({state:false,message:"link not found!"})
        }
        else{
-   res.json(foundData)
+            res.json({state:true,linkdata:foundData})
    }
    }
        catch(error){
