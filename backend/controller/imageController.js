@@ -58,9 +58,15 @@ const imageCreator = async(req,res,next)=>{
   }
 
   const getAllUserImages = async(req,res,next) =>{
-          const userImages = await imageModel.find({userid:req.user.id})
+          const userImages = await imageModel.find({user:req.user.id})
 
-          res.json({userImages:userImages})
+          if(userImages[0]){
+            res.json({userImages,success:true})
+        }
+        else{
+            res.json({message:'No Image Data available!'})
+        }
+      
   }
 
 
