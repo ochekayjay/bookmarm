@@ -16,9 +16,9 @@ const getAlltexts = async(req,res,next)=>{
 }
 
 const getFolderTexts = async(req,res,next)=>{
-    const folderTexts = await textModel.find({folderid:req.params.folderId})
+    const textdata = await textModel.find({folderid:req.params.folderId})
 
-    res.json({folderTexts,success:true})
+    res.json({textdata,success:true})
 }
 
 const getOneText = async(req,res,next)=>{
@@ -34,7 +34,7 @@ const createText = async(req,res,next)=>{
         res.json({status:"error",message : 'fill-in all neccessary details.'})
     }
     else {
-const textObj =  await textModel.create({
+const textdata =  await textModel.create({
             text : req.body.text,
             description: req.body.description,
             title: req.body.title,
@@ -43,7 +43,7 @@ const textObj =  await textModel.create({
             folderid : req.headers.folder
     })
 
-    res.json(textObj)
+    res.json({textdata,success:true})
 }
 }
 
