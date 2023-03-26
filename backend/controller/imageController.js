@@ -26,7 +26,7 @@ const imageCreator = async(req,res,next)=>{
               folder: req.headers.folderid
             })
 
-            res.json({success:true,imagedata:{
+            res.json({state:true,imagedata:{
                       nameofimage:imageobj.nameofimage,
                       title:imageobj.title,
                       source: imageobj.source,
@@ -61,10 +61,10 @@ const imageCreator = async(req,res,next)=>{
           const userImages = await imageModel.find({user:req.user.id})
 
           if(userImages[0]){
-            res.json({imagedata:userImages,success:true})
+            res.json({imagedata:userImages,state:true})
         }
         else{
-            res.json({success:false,message:'No Image Data available!'})
+            res.json({state:false,message:'No Image Data available!'})
         }
       
   }
@@ -89,10 +89,10 @@ const imageCreator = async(req,res,next)=>{
                         const folderImages = await imageModel.find({folder:req.headers.folderid})
 
                         if(folderImages[0]){
-                          res.json({success:true,imagedata:folderImages})
+                          res.json({state:true,imagedata:folderImages})
                         }
                         else{
-                          res.json({success:false,message:'no image data available'})
+                          res.json({state:false,message:'no image data available'})
                         }
                         
                 
@@ -126,10 +126,10 @@ const imageCreator = async(req,res,next)=>{
        
        ])       
        if(!foundData){
-           res.json({success:false,message:"image not found!"})
+           res.json({state:false,message:"image not found!"})
        }
        else{
-   res.json({success:true,imagedata:foundData})
+   res.json({state:true,imagedata:foundData})
    }
    }
        catch(error){
