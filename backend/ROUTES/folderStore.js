@@ -9,11 +9,12 @@ router.get('/',async (req,res,next)=>{
     try{
     
         const folderdata = await folderModel.find({userid:req.user.id})
-        if(folderdata){
-            res.status(200).json({folderdata:folderdata,success:true})
+        
+        if(folderdata[0]){
+            res.status(200).json({folderdata:folderdata,status:true})
         }
         else{
-            res.status(400).json({status:"error",message:"folder does not exist"})
+            res.status(400).json({status:false,message:"no folders available!"})
         
         }
     }
@@ -39,7 +40,7 @@ router.post('/', async (req,res,next)=>{
                 userid:req.user.id,
             })
 
-            res.status(200).json({folderfile:folderfile,success:true})
+            res.status(200).json({folderdata:folderfile,status:true})
         }
     }
     catch(error){
@@ -65,11 +66,11 @@ router.get('/search', async(req,res,next)=>{
                     $caseSensitive: false}} }
     
     ])       
-    if(!foundData){
-        res.json({message:"folder not found!"})
+    if(foundData[0]){
+        res.json({status:true,folderdata:foundData})
     }
     else{
-res.json(foundData)
+        res.json({status:false,message:'folder not available'})
 }
 }
     catch(error){
@@ -83,15 +84,17 @@ res.json(foundData)
 //delete request to delete a particular folder
 router.delete('/:id',async(req,res,next)=>{
     try{
-        const folderholder = await folderModel.findById(req.params.id)
-        if(!folderholder){
-            res.status(400).json({status:"error",message:"this link does not exist"})
-
-        }
-        else{
-            await folderholder.remove()
-            res.json({id:req.user.id,success:true})
-        }
+            await folderModel.findByIdAndDelete(req.params.id)
+            const folderdata = await folderModel.find({userid:req.user.id})
+        
+            if(folderdata[0]){
+                res.status(200).json({folderdata:folderdata,status:true})
+            }
+            else{
+                res.status(400).json({status:false,message:"no folders available!"})
+        
+            }
+            
 
     }
 
