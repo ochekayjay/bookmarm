@@ -11,10 +11,10 @@ router.get('/',async (req,res,next)=>{
         const folderdata = await folderModel.find({userid:req.user.id})
         
         if(folderdata[0]){
-            res.status(200).json({folderdata:folderdata,status:true})
+            res.status(200).json({folderdata:folderdata,state:true})
         }
         else{
-            res.status(400).json({status:false,message:"no folders available!"})
+            res.status(400).json({state:false,message:"no folders available!"})
         
         }
     }
@@ -26,7 +26,7 @@ router.get('/',async (req,res,next)=>{
 router.post('/', async (req,res,next)=>{
     try{
         if(!req.body.name){
-            res.status(400).json({status:'error',message:"fill-in name of folder"})
+            res.status(400).json({state:'error',message:"fill-in name of folder"})
             
         }
         else{
@@ -40,7 +40,7 @@ router.post('/', async (req,res,next)=>{
                 userid:req.user.id,
             })
 
-            res.status(200).json({folderdata:folderfile,status:true})
+            res.status(200).json({folderdata:folderfile,state:true})
         }
     }
     catch(error){
@@ -67,10 +67,10 @@ router.get('/search', async(req,res,next)=>{
     
     ])       
     if(foundData[0]){
-        res.json({status:true,folderdata:foundData})
+        res.json({state:true,folderdata:foundData})
     }
     else{
-        res.json({status:false,message:'folder not available'})
+        res.json({state:false,message:'folder not available'})
 }
 }
     catch(error){
@@ -88,10 +88,10 @@ router.delete('/:id',async(req,res,next)=>{
             const folderdata = await folderModel.find({userid:req.user.id})
         
             if(folderdata[0]){
-                res.status(200).json({folderdata:folderdata,status:true})
+                res.status(200).json({folderdata:folderdata,state:true})
             }
             else{
-                res.status(400).json({status:false,message:"no folders available!"})
+                res.status(400).json({state:false,message:"no folders available!"})
         
             }
             
