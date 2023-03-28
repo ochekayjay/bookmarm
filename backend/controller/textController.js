@@ -77,11 +77,12 @@ const querySearchText = async(req,res,next)=>{
                        $caseSensitive: false}} }
        
        ])       
-       if(!foundData){
-           res.json({state:false,message:"text not found!"})
+       if(!foundData[0]){
+        res.json({textdata:foundData,state:true})
+           
        }
        else{
-        res.json({textdata:foundData,state:true})
+        res.json({state:false,message:"text not found!"})
    
    }
    }

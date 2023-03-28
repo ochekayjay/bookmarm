@@ -125,11 +125,12 @@ const imageCreator = async(req,res,next)=>{
                        $caseSensitive: false}} }
        
        ])       
-       if(!foundData){
-           res.json({state:false,message:"image not found!"})
+       if(foundData[0]){
+        res.json({state:true,imagedata:foundData})
+           
        }
        else{
-   res.json({state:true,imagedata:foundData})
+        res.json({state:false,message:"image not found!"})
    }
    }
        catch(error){

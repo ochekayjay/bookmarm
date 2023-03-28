@@ -92,11 +92,12 @@ const querySearchLink = async(req,res,next)=>{
                        $caseSensitive: false}} }
        
        ])       
-       if(!foundData){
-           res.json({state:false,message:"link not found!"})
+       if(!foundData[0]){
+        res.json({state:true,linkdata:foundData})
+           
        }
        else{
-            res.json({state:true,linkdata:foundData})
+        res.json({state:false,message:"link not found!"}) 
    }
    }
        catch(error){
