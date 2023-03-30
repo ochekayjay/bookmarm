@@ -44,7 +44,6 @@ const textdata =  await textModel.create({
             text : req.body.text,
             description: req.body.description,
             title: req.body.title,
-            source: req.body.source,
             userid : req.user.id,
             folderid : req.headers.folder
     })

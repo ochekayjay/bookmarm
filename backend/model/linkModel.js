@@ -8,7 +8,6 @@ const Link = mongoose.Schema({
         },
     description:{
         type:String,
-        required:true,
         index: true
     },
     title:{

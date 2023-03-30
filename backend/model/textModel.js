@@ -16,10 +16,6 @@ const Text = mongoose.Schema({
         required:true,
         index: true},
         
-    source:{
-        type: String,
-        index: true
-    },
     
     userid:{
         type: mongoose.Schema.Types.ObjectId,

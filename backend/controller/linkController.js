@@ -35,15 +35,15 @@ const getOneLink = async(req,res,next)=>{
 const createLink = async(req,res,next)=>{
 
     try{
-    if(!req.body.link || !req.body.description || !req.body.title){
+    if(!req.body.link || !req.body.title){
         res.json({status:'error',message : 'fill-in all neccessary details.'})
     }
     else {
 const linkObj =  await linkModel.create({
             link : req.body.link,
-            description: req.body.description,
+            description: req.body?.description,
             title: req.body.title,
-            source: req.body.source,
+            source: req.body?.source,
             userid : req.user.id,
             folderid : req.headers.folderid
     })
