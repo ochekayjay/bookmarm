@@ -36,7 +36,7 @@ const createLink = async(req,res,next)=>{
 
     try{
     if(!req.body.link || !req.body.title){
-        res.json({status:'error',message : 'fill-in all neccessary details.'})
+        res.json({status:'error',message : 'filll--in all neccessary details.'})
     }
     else {
 const linkObj =  await linkModel.create({
